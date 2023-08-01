@@ -4,7 +4,9 @@ import { ExampleComponent } from '@dm/edit-image'
 import '@dm/edit-image/dist/index.css'
 
 const App = () => {
-  return <ExampleComponent text="Create React Library Example 😄" />
+  return <>
+    <ExampleComponent/>
+  </>
 }
 
 export default App

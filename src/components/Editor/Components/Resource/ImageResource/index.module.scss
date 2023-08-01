@@ -1,0 +1,186 @@
+.imageResource {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  box-sizing: border-box;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 10px;
+  width: var(--dm-resource-content-width);
+  box-sizing: border-box;
+
+  input {
+    width: 100%;
+    border-radius: 160px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    height: 32px;
+    background: #2B2F3E;
+    border: none;
+    outline: none;
+    color: #ffffff;
+  }
+
+  img {
+    cursor: pointer;
+    right: 20px;
+    position: absolute;
+  }
+}
+
+.searchBox input::placeholder {
+  color: #ADADB3;
+}
+
+.uploadFile {
+  width: var(--dm-resource-content-width);
+  box-sizing: border-box;
+  padding: 0 10px;
+
+  span {
+    cursor: pointer;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    border-radius: 125px;
+    color: #ffffff;
+    font-size: 14px;
+    background: linear-gradient(95deg, #50E2FF 0%, #50BCFF 23%, #536AFF 79%, #613DFF 98%);
+  }
+}
+
+.fileList {
+  padding: 0 10px;
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.empty {
+  width: var(--dm-resource-content-width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 50px;
+
+  img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #9E9E9E;
+    font-size: 12px;
+  }
+}
+
+.fileListItem:nth-child(2n) {
+  margin-left: 10px;
+}
+
+.fileListItem {
+  display: flex;
+  cursor: pointer;
+  width: calc(50% - 5px);
+  margin-bottom: 10px;
+  height: 102px;
+  position: relative;
+
+  img.image {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  img.more {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 2;
+    cursor: pointer;
+    //display: none;
+  }
+}
+
+.fileListItem:hover {
+  img.image {
+    border: 2px solid #50E2FF;
+    transition: all 0.2s;
+  }
+
+  img.more {
+    display: block;
+  }
+}
+
+:global {
+  .customMenu {
+    padding-top: 12px;
+    position: fixed;
+    border-radius: 4px;
+    z-index: 100;
+    width: 200px;
+    background: #1C1D29;
+    box-sizing: border-box;
+    border: 1px solid #2B2F3E;
+
+    .editName {
+      display: flex;
+      align-items: center;
+      padding: 0 17px 12px 11px;
+      border-bottom: 1px solid #2B2F3E;
+
+      span {
+        color: #ADADB3;
+        font-size: 14px;
+        flex: 1;
+      }
+
+      img {
+        cursor: pointer;
+        margin-left: 8px;
+      }
+    }
+
+    .buttons {
+      padding: 6px 0;
+
+      div {
+        color: #ADADB3;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 0 17px 0 11px;
+        cursor: pointer;
+        height: 32px;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+          background: #2C375E;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .customMenu-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+}

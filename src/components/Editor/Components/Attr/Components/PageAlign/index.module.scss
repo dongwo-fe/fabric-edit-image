@@ -1,0 +1,43 @@
+.pageAlign {
+  .title {
+    color: #6A6A76;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 14px;
+  }
+}
+.shareShapeList {
+  display: flex;
+  flex-wrap: wrap;
+}
+.shareShapeListItem {
+  cursor: pointer;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 4px 7px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  img:nth-child(2) {
+    display: none;
+  }
+  span {
+    margin-left: 4px;
+    color: #ADADB3;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  &:hover {
+    background: #2C375E;
+    span {
+      color: #ffffff;
+    }
+    img:nth-child(1) {
+      display: none;
+    }
+    img:nth-child(2) {
+      display: block;
+    }
+  }
+}

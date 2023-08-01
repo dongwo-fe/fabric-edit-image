@@ -1,0 +1,21 @@
+.workSpaceAttr {
+  padding: 0 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+.base {
+  > div {
+    margin-bottom: 10px;
+  }
+}
+.division {
+  height: 1px;
+  background: #2B2F3E;
+  margin: 2px 0 12px 0;
+}
+.title {
+  color: #6A6A76;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}

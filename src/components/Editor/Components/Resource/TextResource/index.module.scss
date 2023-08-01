@@ -1,0 +1,45 @@
+.textResource {
+  padding: 10px 0;
+  overflow: hidden;
+}
+
+.addShareTextButton {
+  width: var(--dm-resource-content-width);
+  box-sizing: border-box;
+  padding: 0 10px;
+
+  span {
+    background: linear-gradient(95deg, #50E2FF 0%, #50BCFF 23%, #536AFF 79%, #613DFF 98%);
+    height: 32px;
+    font-size: 14px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 125px;
+  }
+}
+
+.textListItem {
+  width: var(--dm-resource-content-width);
+  box-sizing: border-box;
+  padding: 0 10px;
+
+  span {
+    height: 36px;
+    border-radius: 4px;
+    background: #232634;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ADADB3;
+    cursor: pointer;
+    margin-bottom: 10px;
+    &:hover {
+      background: #2C375E;
+      color: #ADADB3;
+    }
+  }
+}

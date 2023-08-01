@@ -1,0 +1,23 @@
+.size {
+  display: flex;
+  justify-content: space-between;
+  .ratio {
+    width: 52px;
+    display: inline-block;
+    cursor: pointer;
+    .title {
+      color: #6A6A76;
+      font-weight: 600;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    .content {
+      display: flex;
+      align-items: center;
+      background: #232634;
+      height: 28px;
+      padding: 0 19px;
+      border-radius: 4px;
+    }
+  }
+}

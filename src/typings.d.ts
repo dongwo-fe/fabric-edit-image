@@ -6,6 +6,10 @@ declare module '*.css' {
   const content: { [className: string]: string };
   export default content;
 }
+declare module '*.scss' {
+  const content: { [className: string]: string };
+  export default content;
+}
 
 interface SvgrComponent extends React.StatelessComponent<React.SVGAttributes<SVGElement>> {}
 
@@ -15,3 +19,16 @@ declare module '*.svg' {
   export default svgUrl;
   export { svgComponent as ReactComponent }
 }
+
+declare global {
+  module 'fabric/fabric-impl' {
+    interface IObjectOptions {
+      /**
+       * 标识
+       */
+      id?: string | undefined;
+    }
+  }
+}
+
+declare module 'react-sortable-hoc'

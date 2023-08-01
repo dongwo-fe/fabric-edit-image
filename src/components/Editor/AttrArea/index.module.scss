@@ -1,0 +1,55 @@
+.attrWrap {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.attrTab {
+  display: flex;
+  height: 60px;
+  background-color: #12131D;
+  background-repeat: no-repeat;
+
+  div {
+    padding-top: 10px;
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+
+    span {
+      display: inline;
+      font-size: 14px;
+      color: #ADADB3;
+      font-weight: bold;
+    }
+  }
+
+  .attrTabActive {
+    span {
+      position: relative;
+      color: #50E2FF;
+
+      &:after {
+        content: '';
+        height: 2px;
+        border-radius: 8px;
+        background: #50E2FF;
+        width: 100%;
+        display: block;
+        position: absolute;
+        left: 0;
+        top: calc(100% + 5px);
+      }
+    }
+  }
+}
+
+.attrContent {
+  flex: 1;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

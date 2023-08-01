@@ -24,19 +24,23 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^17.0.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "@types/fabric": "^5.3.3",
+    "@types/file-saver": "^2.0.5",
+    "@types/fontfaceobserver": "^2.1.0",
     "@types/jest": "^25.1.4",
     "@types/node": "^12.12.38",
     "@types/react": "^16.9.27",
-    "@types/react-dom": "^16.9.7",
+    "@types/react-color": "^3.0.6",
+    "@types/react-dom": "17.0.2",
+    "@types/resize-observer-browser": "^0.1.7",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
-    "microbundle-crl": "^0.13.10",
     "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
@@ -50,14 +54,29 @@
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-standard": "^4.0.1",
     "gh-pages": "^2.2.0",
+    "microbundle-crl": "^0.13.10",
+    "node-sass": "^9.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "react-scripts": "^3.4.1",
     "typescript": "^3.7.5"
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "array-move": "^4.0.0",
+    "events": "^3.3.0",
+    "fabric": "5.3.0",
+    "file-saver": "^2.0.5",
+    "fontfaceobserver": "^2.3.0",
+    "hotkeys-js": "^3.11.2",
+    "rc-select": "^14.7.1",
+    "react-best-gradient-color-picker": "^2.2.22",
+    "react-color": "^2.19.3",
+    "react-select": "^5.7.4",
+    "react-sortable-hoc": "^2.0.0"
+  }
 }

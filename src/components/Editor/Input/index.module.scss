@@ -1,0 +1,32 @@
+.customInput {
+  display: inline-block;
+  .title {
+    color: #6A6A76;
+    font-weight: 600;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  .inputWrap {
+    display: flex;
+    align-items: center;
+    background: #232634;
+    height: 28px;
+    padding: 0 5px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    input {
+      height: 22px;
+      background: none;
+      border: none;
+      outline: none;
+      width: 36px;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    span {
+      color: #ADADB3;
+      font-size: 12px;
+      margin-left: 4px;
+    }
+  }
+}

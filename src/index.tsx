@@ -1,10 +1,15 @@
-import * as React from 'react'
-import styles from './styles.module.css'
+import React from 'react'
+import { CanvasProvider } from './components/Draw'
+import { EditorProvider } from './components/Editor/Context'
+import Editor from './components/Editor';
+import './font/font.css'
 
-interface Props {
-  text: string
-}
-
-export const ExampleComponent = ({ text }: Props) => {
-  return <div className={styles.test}>Example Component: {text}</div>
+export const ExampleComponent = () => {
+  return (
+    <CanvasProvider>
+      <EditorProvider>
+        <Editor/>
+      </EditorProvider>
+    </CanvasProvider>
+  )
 }
