@@ -6,20 +6,17 @@ import Position from '../Components/Pos'
 import Transparent from '../Components/Trans'
 import PageAlign from '../Components/PageAlign'
 import CoverOrder from '../Components/CoverOrder'
-import useAttr from '../../../../Draw/hooks/useAttr';
+import useAttr from '../../../../Draw/hooks/useAttr'
+import TextAttr from '../Components/Text';
 
-
-const ImageSpaceAttr = () => {
+const TextSpaceAttr = () => {
   const {getActiveObject} = useAttr()
   return (
     <div className={style.workSpaceAttr}>
       <div className={style.base}>
         <div>
           {/* 设置元素的大小、锁定比例 */}
-          <Size
-            getActiveObject={getActiveObject}
-            showRation={true}
-          />
+          <Size getActiveObject={getActiveObject} showRation/>
         </div>
         <div>
           {/* 设置元素的位置、旋转角度 */}
@@ -29,14 +26,16 @@ const ImageSpaceAttr = () => {
           <Transparent/>
         </div>
       </div>
-      <div className={style.division}></div>
+      <div className={style.division}/>
+      <TextAttr/>
+      <div className={style.division}/>
       {/* 页面对齐 */}
       <PageAlign/>
-      <div className={style.division}></div>
+      <div className={style.division}/>
       {/*图层顺序 */}
       <CoverOrder/>
     </div>
   );
 };
 
-export default ImageSpaceAttr;
+export default TextSpaceAttr;

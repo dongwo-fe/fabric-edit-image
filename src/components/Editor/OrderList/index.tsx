@@ -1,15 +1,19 @@
 // @ts-nocheck
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc'
 import { arrayMoveImmutable } from 'array-move'
 import { fabric } from 'fabric'
 import style from './index.module.scss'
 import { Context } from '../../Draw'
 import userOrder from '../../Draw/hooks/userOrder';
+import useLock from '../../Draw/hooks/useLock';
 
 const SortableItem = sortableElement((props: { item }) => {
+  const {changeOwnLock} = useLock()
   const {item} = props
   const {selectIds, canvas} = useContext(Context)
+  const isLock = item.object.hasControls
+  const isVisible = item.object.visible
   /**
    * 设置高亮
    */
@@ -18,13 +22,43 @@ const SortableItem = sortableElement((props: { item }) => {
     canvas.setActiveObject(item.object)
     canvas.renderAll()
   }, [item, canvas])
+
+  /**
+   * 锁定对象
+   */
+  const onLockObject = (e) => {
+    e.stopPropagation()
+    changeOwnLock(!isLock, item.object)
+  }
+  /**
+   * 隐藏对象
+   */
+  const onHiddenObject = (e) => {
+    e.stopPropagation()
+    item.object.set({visible: !isVisible})
+    canvas?.renderAll()
+  }
   return <div
     onClick={clickItem}
     className={`${style.orderListItem} ${selectIds.includes(item.id) ? style.active : ''}`}
   >
     <div className={style.button}>
-      <img src="https://ossprod.jrdaimao.com/file/1690437893570728.svg" alt=""/>
-      <img src="https://ossprod.jrdaimao.com/file/1690437902259961.svg" alt=""/>
+      {/* 隐藏 */}
+      <img
+        onClick={onHiddenObject}
+        src={isVisible ?
+          'https://ossprod.jrdaimao.com/file/1690437893570728.svg' :
+          'https://ossprod.jrdaimao.com/file/1690945206225980.svg'}
+        alt=""
+      />
+      {/* 锁定 */}
+      <img
+        onClick={onLockObject}
+        src={isLock ?
+          'https://ossprod.jrdaimao.com/file/1690437902259961.svg' :
+          'https://ossprod.jrdaimao.com/file/1690944574168632.svg'}
+        alt=""
+      />
     </div>
     <div className={style.content}>
       {/*目前只有俩类型，先这样写吧，后面多了跨域拆成枚举组件*/}

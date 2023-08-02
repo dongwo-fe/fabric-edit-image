@@ -6,7 +6,9 @@ import { uuid } from '../../../utils/utils';
 
 // 默认参数
 const DefaultOptions = {
-  text: {},
+  text: {
+    fill: '#000000'
+  },
   image: {},
   bgImage: {}
 }
@@ -18,7 +20,8 @@ const useAddObject = () => {
    * @param item
    */
   const addImage = useCallback((item) => {
-    const scale = workSpace?.getScale()
+    if (!workSpace) return
+    const scale = workSpace.getScale()
     fabric.Image.fromURL(item.src, img => {
       img.set({
         id: uuid(),
@@ -37,10 +40,12 @@ const useAddObject = () => {
    * 新增文字
    */
   const addText = useCallback((item) => {
-    const text = new fabric.IText(item.title, {
+    if (!workSpace) return
+    const text = new fabric.Textbox(item.title, {
+      ...DefaultOptions.text,
       fontSize: item.style.fontSize as number * 3,
       fontWeight: item.style.fontWeight as number,
-      id: uuid()
+      id: uuid(),
     })
     text.set({
       left: (workSpace.width - text.width) / 2,
@@ -48,6 +53,7 @@ const useAddObject = () => {
     })
     canvas?.add(text)
     canvas?.setActiveObject(text)
+    canvas?.requestRenderAll();
   }, [workSpace, canvas])
   return {
     addImage,

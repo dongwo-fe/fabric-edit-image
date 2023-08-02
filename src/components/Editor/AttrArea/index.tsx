@@ -32,7 +32,7 @@ const AttrArea = () => {
           })
         }
       </div>
-      <div className={style.attrContent}>
+      <div id='attr-content' className={style.attrContent}>
         <div style={{display: attrTab === 'Attr' ? 'block' : 'none'}}>
           {
             AttrCom ? <AttrCom/> : <WorkSpaceAttr/>

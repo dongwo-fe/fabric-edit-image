@@ -23,3 +23,10 @@ export function retainNumber(value: string | number): string {
   return ('' + value).replace(/[^0-9]/g, '')
 }
 
+export function colorRGBtoHex(color:string) {
+  const rgb = color.split(',');
+  const r = parseInt(rgb[0]);
+  const g = parseInt(rgb[1]);
+  const b = parseInt(rgb[2]);
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}

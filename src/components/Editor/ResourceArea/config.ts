@@ -32,4 +32,4 @@ export const ResourceContentComEnum = {
   [ResourceTypeEnum.ALREADY_UPLOAD]: ImageResource,
   [ResourceTypeEnum.TEXT]: TextResource
 }
-export const DefaultSelectKey = ResourceTypeEnum.TEXT
+export const DefaultSelectKey = ResourceTypeEnum.ALREADY_UPLOAD

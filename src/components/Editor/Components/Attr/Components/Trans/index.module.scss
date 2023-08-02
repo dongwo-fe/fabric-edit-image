@@ -17,7 +17,6 @@
 
 .reverseWrap {
   display: flex;
-
   div {
     cursor: pointer;
     display: flex;
@@ -27,9 +26,12 @@
     height: 28px;
     border-radius: 4px;
     background: #232634;
-
     &:nth-child(1) {
       margin-right: 4px;
+    }
+
+    &:hover {
+      background: #2C375E;
     }
   }
 }
@@ -46,5 +48,8 @@
     padding: 0 10px;
     justify-content: center;
     border-radius: 4px;
+    &:hover {
+      background: #2C375E;
+    }
   }
 }

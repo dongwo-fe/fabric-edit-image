@@ -7,17 +7,28 @@ import { Context } from '../../../../../Draw';
 const Position = () => {
   const {canvas} = useContext(Context)
   const {getActiveObject, setAttr} = useAttr()
-  const [rotate, setRotate] = useState('0')
+  const [rotate, setRotate] = useState<string | number>('0')
   const [x, setX] = useState<string | number>(0)
   const [y, setY] = useState<string | number>(0)
 
   useEffect(() => {
+    getAttr()
+  }, [canvas])
+
+  useEffect(() => {
+    if (!canvas) return
+    canvas.on('object:modified', getAttr)
+    return () => {
+      canvas.off('object:modified', getAttr)
+    }
+  }, [canvas])
+  const getAttr = () => {
     const activeObject = getActiveObject()
     if (!activeObject) return
     setX(parseInt(String(activeObject.left || 0)))
     setY(parseInt(String(activeObject.top || 0)))
-  }, [canvas])
-
+    setRotate(parseInt(String(activeObject.angle || 0)))
+  }
   /**
    * 修改旋转角度
    * @param value

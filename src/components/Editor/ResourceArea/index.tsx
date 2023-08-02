@@ -14,10 +14,10 @@ const ResourceArea = () => {
   const ResourceComponent = ResourceContentComEnum[activeKey]
   const onSetCollapsed = () => {
     if (!collapsed) {
-      document.body.style.setProperty('--dm-change-Resource-content-width', '0')
+      document.body.style.setProperty('--dm-change-resource-content-width', '0')
       setCollapsed(true)
     } else {
-      document.body.style.setProperty('--dm-change-Resource-content-width', '240px')
+      document.body.style.setProperty('--dm-change-resource-content-width', '240px')
       setCollapsed(false)
     }
   }

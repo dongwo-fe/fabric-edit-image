@@ -1,0 +1,25 @@
+.inputNumber {
+  background: #232634;
+  border-radius: 4px;
+  height: 28px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  input {
+    width: 36px;
+    height: 20px;
+    background: none;
+    outline: none;
+    border: none;
+    color: #ffffff;
+    font-weight: bold;
+  }
+  .control {
+    display: flex;
+    flex-direction: column;
+    img{
+      cursor: pointer;
+    }
+  }
+}

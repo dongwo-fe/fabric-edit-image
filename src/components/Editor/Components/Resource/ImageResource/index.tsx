@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './index.module.scss'
 import { useDropDown } from './dropDown';
 import useAddObject from '../../../../Draw/hooks/useAddObject';
+import { getImageList } from '../../../../../api/image';
 
 const ImageResource = () => {
   const {addImage} = useAddObject()
@@ -10,19 +11,18 @@ const ImageResource = () => {
   const [list, setList] = useState([])
   const {run} = useDropDown()
   useEffect(() => {
-    getImageList()
+    queryList()
   }, [])
   const onClickMore = (e: any, item: any) => {
     run(e, item)
   }
-  const getImageList = async () => {
-    setList([
-      {
-        src: 'https://ossprod.jrdaimao.com/file/1690796743935891.jpeg',
-        name: 'namanannana',
-        id: '111'
-      }
-    ])
+  const queryList = async () => {
+    try {
+      const res = await getImageList({phone: '15612868761'})
+      console.log(res)
+    } catch (err) {
+      console.log(err)
+    }
   }
   return (
     <div className={styles.imageResource}>

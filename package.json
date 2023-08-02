@@ -1,6 +1,6 @@
 {
   "name": "@dm/edit-image",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "edit image",
   "author": "jiyongsheng",
   "license": "MIT",
@@ -67,6 +67,7 @@
     "dist"
   ],
   "dependencies": {
+    "@dm/http_request": "^2.0.0",
     "array-move": "^4.0.0",
     "events": "^3.3.0",
     "fabric": "5.3.0",

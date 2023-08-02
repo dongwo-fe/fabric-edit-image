@@ -1,4 +1,5 @@
 import ImageSpaceAttr from '../Components/Attr/ImageSpaceAttr'
+import TextSpaceAttr from '../Components/Attr/TextSpaceAttr';
 
 export interface AttrTabListItem {
   title: string
@@ -19,7 +20,7 @@ export const attrTabList: Array<AttrTabListItem> = [
   }
 ]
 export const attrAreaComponent = {
-  image: ImageSpaceAttr,
-  // text:
+  'image': ImageSpaceAttr,
+  'textbox': TextSpaceAttr
 }
 export const DefaultKey = 'Attr'

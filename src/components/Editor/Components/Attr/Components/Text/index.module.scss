@@ -1,0 +1,167 @@
+.textArea {
+  position: relative;
+
+  .title {
+    color: #6A6A76;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .textAreaContent {
+
+  }
+}
+
+.fontFamily {
+  display: flex;
+  margin-bottom: 4px;
+
+  .size {
+    width: 64px;
+    margin-left: 4px;
+  }
+}
+
+.color {
+  display: flex;
+  margin-bottom: 4px;
+}
+
+.colorContent {
+  background: #232634;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 98px;
+  height: 28px;
+  margin-left: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  > div {
+    background: #FFFFFF;
+    border-radius: 2px;
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+  }
+
+  span {
+    color: #ADADB3;
+    font-weight: bold;
+    font-size: 14px;
+  }
+}
+
+.style {
+  display: flex;
+  margin-bottom: 12px;
+
+  .alignGroup {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    background: #232634;
+    padding: 0 8px;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+
+    > div {
+      width: 24px;
+      height: 24px;
+      border-radius: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img:nth-child(2) {
+        display: none;
+      }
+
+      &:hover, &.alignGroupActive {
+        background: #2B2F3E;
+
+        img:nth-child(1) {
+          display: none;
+        }
+
+        img:nth-child(2) {
+          display: inline;
+        }
+      }
+    }
+  }
+
+  .styleGroup {
+    width: 98px;
+    margin-left: 4px;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-between;
+
+    > div {
+      width: 30px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #232634;
+      border-radius: 4px;
+      cursor: pointer;
+
+      div {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 2px;
+
+        &:hover, &.styleGroupActive {
+          background: #2C375E;
+
+          img:nth-child(1) {
+            display: none;
+          }
+
+          img:nth-child(2) {
+            display: inline;
+          }
+        }
+
+        img:nth-child(2) {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.fixColorPicker {
+  position: absolute;
+  left: calc(-100% - 30px);
+  top: 0;
+  z-index: 200;
+}
+
+.disabledSelect {
+  cursor: not-allowed;
+
+  :global {
+    .css-894a34-indicatorSeparator {
+      display: none;
+    }
+  }
+}
+
+.select {
+  :global {
+    .css-1u9des2-indicatorSeparator {
+      display: none;
+    }
+  }
+}
