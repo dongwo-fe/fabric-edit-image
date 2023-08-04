@@ -20,6 +20,8 @@
   .size {
     width: 64px;
     margin-left: 4px;
+    flex-shrink: 0;
+    justify-content: space-between;
   }
 }
 

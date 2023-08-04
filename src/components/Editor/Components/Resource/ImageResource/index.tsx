@@ -25,15 +25,15 @@ const ImageResource = () => {
     queryList()
   }, [])
 
-  useEffect(() => {
-    if (!canvas) return
-    canvas.on('drop', onDrop)
-    canvas.on('dragover', onDragover)
-    return () => {
-      canvas.off('drop', onDrop)
-      canvas.off('dragover', onDragover)
-    }
-  }, [canvas])
+  // useEffect(() => {
+  //   if (!canvas) return
+  //   canvas.on('drop', onDrop)
+  //   canvas.on('dragover', onDragover)
+  //   return () => {
+  //     canvas.off('drop', onDrop)
+  //     canvas.off('dragover', onDragover)
+  //   }
+  // }, [canvas])
 
   // 添加画布的拖拽事件监听器
   const onDrop = ({e}) => {

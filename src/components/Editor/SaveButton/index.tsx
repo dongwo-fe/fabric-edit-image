@@ -6,7 +6,7 @@ import { uuid } from '../../../utils/utils';
 
 
 const SaveButton = () => {
-  const {editor, canvas} = useContext(Context)
+  const {editor, canvas, workSpace} = useContext(Context)
   const [show, setShow] = useState(false)
   useEffect(() => {
     const onClick = () => {
@@ -39,12 +39,14 @@ const SaveButton = () => {
    * 保存为图片
    */
   const onSaveToImage = () => {
-    if (!canvas || !editor) return
+    if (!canvas || !editor) return;
     const workspace = canvas?.getObjects().find((item) => item.id === 'workspace');
-    if (!workspace) return
-    const {left, top, width, height} = workspace;
+    editor.ruler.hideGuideline();
+    if (!workspace) return;
+
+
+    const { left, top, width, height } = workspace;
     const option = {
-      name: 'New Image',
       format: 'png',
       quality: 1,
       left,
@@ -52,10 +54,15 @@ const SaveButton = () => {
       width,
       height,
     };
+
     canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
     const dataUrl = canvas.toDataURL(option);
-    saveAs(dataUrl,`${uuid()}.png`)
+    saveAs(dataUrl, `${uuid()}.png`);
+    workSpace?.auto()
+    // 恢复之前的缩放比例
+    editor.ruler.showGuideline();
   }
+
   return (
     <div className={styles.headerRightControl}>
       {/*<span className={styles.previewButton} onClick={onPreview}>*/}

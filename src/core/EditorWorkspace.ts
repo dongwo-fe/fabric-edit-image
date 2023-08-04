@@ -58,15 +58,13 @@ class EditorWorkspace {
     fabric.Image.fromURL(this.option.src, img => {
       img.set({
         type: 'image',
-        id: uuid()
+        id: uuid(),
+        left: 0.5,
+        top: 0.5
       })
       this.width = img.width
       this.height = img.height
       this._initRect(img)
-      // events.emit('getInitialImageHeight',{
-      //   width:this.width,
-      //   height:this.height
-      // })
     })
   }
 
@@ -158,11 +156,12 @@ class EditorWorkspace {
     const viewPortHeight = this.workspaceEl.offsetHeight;
     const width = this.width || 0
     const height = this.height || 0
+    if (!width || !height) return 0
     // 按照宽度
     if (viewPortWidth / viewPortHeight < width / height) {
-      return viewPortWidth / width;
+      return viewPortWidth / width - 0.08;
     } // 按照宽度缩放
-    return viewPortHeight / height;
+    return viewPortHeight / height - 0.08;
   }
 
   // 放大
@@ -186,9 +185,11 @@ class EditorWorkspace {
 
   // 自动缩放
   auto() {
-    const scale = this.getScale() - 0.08;
-    events.emit(Types.CHANGE_SCALE, scale)
-    this.setZoomAuto(scale);
+    const scale = this.getScale();
+    if (scale) {
+      events.emit(Types.CHANGE_SCALE, scale)
+      this.setZoomAuto(scale);
+    }
   }
 
   // 1:1 放大

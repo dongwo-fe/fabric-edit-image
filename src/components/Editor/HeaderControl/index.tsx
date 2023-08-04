@@ -8,7 +8,7 @@ import { hotkeys } from '../../../core/initHotKeys';
 import styles from './styles.module.scss'
 
 const HeaderControl = () => {
-  const {workSpace, drawMode, setDrawMode, canvas, editor} = useContext(Context)
+  const {workSpace, drawMode, setDrawMode, canvas, editor, show} = useContext(Context)
   const [scale, setScale] = useState(0)
   const drawModeRef = useRef('default')
   const historyFlagRef = useRef(false)
@@ -61,8 +61,8 @@ const HeaderControl = () => {
 
   useEffect(() => {
     if (!workSpace || !editor) return
-    reset(editor?.getJson());
-  }, [editor, workSpace])
+    reset(editor.getJson());
+  }, [editor, workSpace, show])
 
   const save = (event: any) => {
     // 过滤选择元素事件
@@ -108,6 +108,7 @@ const HeaderControl = () => {
     historyFlagRef.current = true
     go(1);
   };
+
   return (
     <div className={styles.headerControl}>
       <div>

@@ -14,13 +14,12 @@ npm install --save @dm/edit-image
 
 ```tsx
 import React, { Component } from 'react'
-
-import MyComponent from '@dm/edit-image'
+import { EditImage } from '@dm/edit-image'
 import '@dm/edit-image/dist/index.css'
 
 class Example extends Component {
   render() {
-    return <MyComponent />
+    return <EditImage src={""} onBack={()=>{}} />
   }
 }
 ```
