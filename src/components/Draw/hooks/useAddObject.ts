@@ -21,7 +21,7 @@ const useAddObject = () => {
   const addImage = useCallback((src, options) => {
     if (!workSpace) return
     const scale = workSpace.getScale()
-    fabric.Image.fromURL(src, img => {
+    fabric.Image.fromURL(`${src}?t=${Date.now()}`, img => {
       img.set({
         ...DefaultOptions.image,
         id: uuid(),
@@ -34,7 +34,7 @@ const useAddObject = () => {
       canvas?.add(img)
       canvas?.setActiveObject(img);
       canvas?.requestRenderAll();
-    })
+    }, { crossOrigin: 'anonymous'})
   }, [workSpace, canvas])
 
   /**

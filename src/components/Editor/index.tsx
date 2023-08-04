@@ -30,15 +30,17 @@ const Editor: React.FC<EditImageProps> = (props) => {
       </div>
       <div className={styles.content}>
         {/* 左侧资源区域 */}
-        <ResourceArea/>
+        { show ? <ResourceArea/> : null }
         <div className={styles.canvasArea}>
           {/* 画布区域 */}
           <Draw src={props.src}/>
         </div>
-        <div className={styles.attrArea}>
-          {/* 属性区域 */}
-          {show ? <AttrArea/> : null}
-        </div>
+        {
+          show ? <div className={styles.attrArea}>
+            {/* 属性区域 */}
+            <AttrArea/>
+          </div> : null
+        }
       </div>
     </div>
   </LoadingOverlay>

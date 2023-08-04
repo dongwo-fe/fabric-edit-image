@@ -10,8 +10,8 @@ import { saveHistory } from '../../../api/image';
 const SaveButton = ({src}: { src: string | undefined }) => {
   const userInfo = localStorage.getItem('userInfo')
   const phone = userInfo ? JSON.parse(userInfo).phone : '15612868761';
-  const {editor, canvas, workSpace} = useContext(Context)
-  const [show, setShow] = useState(false)
+  const {editor, canvas, workSpace, show} = useContext(Context)
+  // const [show, setShow] = useState(false)
   // useEffect(() => {
   //   const onClick = () => {
   //     setShow(false)
@@ -26,16 +26,14 @@ const SaveButton = ({src}: { src: string | undefined }) => {
    */
   const onSave = (e: any) => {
     e.stopPropagation()
-    if (!editor) return
+    if (!editor || !show) return
     // setShow(prevState => !prevState)
     const dataJson = editor.getJson();
-    console.log(JSON.stringify(dataJson))
     saveHistory({
       phone,
       data: dataJson ? JSON.stringify(dataJson) : {},
       imgSrc: src
     })
-
     onSaveToImage()
   }
   /**
@@ -74,7 +72,8 @@ const SaveButton = ({src}: { src: string | undefined }) => {
       workSpace?.auto()
       // 恢复之前的缩放比例
       editor.ruler.showGuideline();
-    }catch (err){
+    }catch (err) {
+      console.log('onSaveToImage', err)
       workSpace?.auto()
     }
   }

@@ -60,12 +60,12 @@ class EditorWorkspace {
         type: 'image',
         id: uuid(),
         left: 0.5,
-        top: 0.5
+        top: 0.5,
       })
       this.width = img.width
       this.height = img.height
       this._initRect(img)
-    })
+    }, { crossOrigin: 'anonymous'})
   }
 
   _initRect(img?: fabric.Object) {
