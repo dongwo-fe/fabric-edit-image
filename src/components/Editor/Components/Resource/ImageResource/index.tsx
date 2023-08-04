@@ -5,8 +5,10 @@ import { useDropDown } from './dropDown';
 import useAddObject from '../../../../Draw/hooks/useAddObject';
 import { addImageApi, getImageList, postUploadImage } from '../../../../../api/image';
 import { Context } from '../../../../Draw';
+import { Context as EditorContext } from '../../../Context'
 
 const ImageResource = () => {
+  const {setLoading} = useContext(EditorContext)
   const {canvas} = useContext(Context)
   const EDIT_IMAGE_LIST = sessionStorage.getItem('EDIT_IMAGE_LIST')
   const userInfo = localStorage.getItem('userInfo')
@@ -49,14 +51,14 @@ const ImageResource = () => {
     e.preventDefault()
   }
   const onClickMore = (e: any, item: any) => {
-    run(e, item)
+    run(e, {...item, callback: queryList})
   }
   /**
    * 获取图片数据
    */
   const queryList = async () => {
     try {
-      const res = await getImageList({phone})
+      const res = await getImageList({phone, pageIndex: 1, pageSize: 500})
       sessionStorage.setItem('EDIT_IMAGE_LIST', JSON.stringify(res))
       setList(res)
     } catch (err) {
@@ -71,17 +73,23 @@ const ImageResource = () => {
     if (uploading) return
     setUploading(true)
     const [file] = e.target.files
-    if (!/(png|jpg|jpeg)/g.test(file.type)) return
+    if (!/(png|jpg|jpeg)/g.test(file.type)) return console.log('type error')
     try {
+      setLoading(true)
       const res = await postUploadImage(file)
       await addImageApi({
         phone,
-        imgSrc: res.url
+        imgSrc: res.url,
+        stockName: file.name
       })
       await queryList()
       setUploading(false)
+      setLoading(false)
+      e.target.value = ''
     } catch (err) {
+      e.target.value = ''
       setUploading(false)
+      setLoading(false)
     }
   }
 
@@ -105,7 +113,7 @@ const ImageResource = () => {
         </div> : null
       }
       {
-        list.length ? <div className={styles.fileList}>
+        list.length ? <div className={styles.fileList} id='img-file-list'>
           {
             list.map((item) => {
               return <div
@@ -125,12 +133,12 @@ const ImageResource = () => {
                   alt=""
                 />
                 {/*右键菜单来不及做了，先不做*/}
-                {/*<img*/}
-                {/*  onClick={(e) => onClickMore(e, item)}*/}
-                {/*  className={styles.more}*/}
-                {/*  src="https://ossprod.jrdaimao.com/file/1690363754666532.svg"*/}
-                {/*  alt=""*/}
-                {/*/>*/}
+                <img
+                  onClick={(e) => onClickMore(e, item)}
+                  className={styles.more}
+                  src="https://ossprod.jrdaimao.com/file/1690363754666532.svg"
+                  alt=""
+                />
               </div>
             })
           }

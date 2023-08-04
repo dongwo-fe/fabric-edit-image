@@ -1,28 +1,66 @@
 // @ts-nocheck
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { saveAs } from 'file-saver';
+import { delstock } from '../../../../../api/image';
+import { Context } from '../../../Context';
 
 let shareEl = null
 
 export const useDropDown = () => {
   const clickRef = useRef()
-  const removeEl = useCallback((e) => {
-    if (e?.target === clickRef?.current) return
-    if (shareEl) {
-      document.body.removeChild(shareEl)
-      shareEl = null
+  const cacheItem = useRef()
+  const [show, setShow] = useState(false)
+  const {setLoading} = useContext(Context)
+
+  useEffect(() => {
+    const el = document.querySelector('#img-file-list')
+    if (!el) return
+    if (show) {
+      el.style.overflow = 'hidden'
+    } else {
+      el.style.overflow = 'auto'
     }
-  }, [])
+  }, [show])
   useEffect(() => {
     window.addEventListener('click', removeEl)
     return () => {
       window.removeEventListener('click', removeEl)
     }
   }, [])
-  const onClick = (e) => {
-    e.stopPropagation()
+
+  const removeEl = useCallback((e) => {
+    if (e?.target === clickRef?.current) return
+    if (shareEl) {
+      document.body.removeChild(shareEl)
+      shareEl = null
+      setShow(false)
+    }
+  }, [])
+  const onClick = async (e) => {
+    // e.stopPropagation()
+    if (!e.target || !cacheItem.current) return
+    const {imgSrc, stockName, _id, callback} = cacheItem.current
+    if (e.target.innerHTML === '下载') {
+      saveAs(imgSrc, `${stockName}${imgSrc.slice(imgSrc.lastIndexOf('.'))}`)
+    }
+    if (e.target.innerHTML === '删除') {
+      try {
+        setLoading(true)
+        await delstock({id: _id})
+        await callback?.()
+        setLoading(false)
+      } catch (err) {
+        setLoading(false)
+      }
+    }
   }
   const run = (e: any, item: any) => {
-    removeEl()
+    setShow(true)
+    cacheItem.current = item
+    if (shareEl) {
+      document.body.removeChild(shareEl)
+      shareEl = null
+    }
     clickRef.current = e.target;
     const parentNode = e.target.parentNode
     const {top, left} = parentNode.getBoundingClientRect()

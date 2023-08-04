@@ -26,7 +26,7 @@ const Editor: React.FC<EditImageProps> = (props) => {
         {/* 快捷操作 */}
         <HeaderControl/>
         {/* 保存 */}
-        <SaveButton/>
+        <SaveButton src={props.src} />
       </div>
       <div className={styles.content}>
         {/* 左侧资源区域 */}

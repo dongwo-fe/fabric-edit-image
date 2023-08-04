@@ -15,3 +15,14 @@ export const postUploadImage = (file: any) => {
 export const addImageApi = (data: any) => {
   return fetch.post('/api_editimg/addstock', data);
 }
+
+// save
+export const saveHistory = (data: any) => {
+  return fetch.post('/api_editimg/save', data);
+}
+
+// delete
+export const delstock = (data: any) => {
+  return fetch.get('/api_editimg/delstock', data);
+}
+

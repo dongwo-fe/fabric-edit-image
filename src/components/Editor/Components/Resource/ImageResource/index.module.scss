@@ -109,8 +109,6 @@
     height: 100%;
     box-sizing: border-box;
     object-fit: cover;
-    background: url("https://juranapp-prod.oss-cn-beijing.aliyuncs.com/file/1639966318079/picture") no-repeat;
-    background-size: cover;
   }
 
   img.more {
@@ -119,7 +117,7 @@
     right: 6px;
     z-index: 2;
     cursor: pointer;
-    //display: none;
+    display: none;
   }
 }
 
