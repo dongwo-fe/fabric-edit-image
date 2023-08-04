@@ -1,7 +1,7 @@
 // @ts-nocheck
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc'
-import { arrayMoveImmutable } from 'array-move'
+import { arrayMoveImmutable } from '../../../utils/utils'
 import { fabric } from 'fabric'
 import style from './index.module.scss'
 import { Context } from '../../Draw'

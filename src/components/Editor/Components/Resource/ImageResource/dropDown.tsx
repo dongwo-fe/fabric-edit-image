@@ -18,17 +18,21 @@ export const useDropDown = () => {
       window.removeEventListener('click', removeEl)
     }
   }, [])
+  const onClick = (e) => {
+    e.stopPropagation()
+  }
   const run = (e: any, item: any) => {
     removeEl()
     clickRef.current = e.target;
     const parentNode = e.target.parentNode
     const {top, left} = parentNode.getBoundingClientRect()
     const div = shareEl = document.createElement('div')
+    div.addEventListener('click', onClick)
     div.innerHTML = `<div class='customMenu' style='left:${left + parentNode.offsetWidth + 10}px;top:${top}px'>
-    <div class='editName'>
-      <span>某某文件名...名称.png</span>
-      <img src="https://ossprod.jrdaimao.com/file/1690528866207938.svg" alt=""/>
-    </div>
+<!--    <div class='editName'>-->
+<!--      <span>某某文件名...名称.png</span>-->
+<!--      <img src="https://ossprod.jrdaimao.com/file/1690528866207938.svg" alt=""/>-->
+<!--    </div>-->
     <div class='buttons'>
       <div>下载</div>
       <div>删除</div>

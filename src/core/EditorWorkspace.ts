@@ -3,7 +3,10 @@ import { throttle, uuid } from '../utils/utils';
 import { events, Types } from '../utils/events';
 import { isNumber } from '../utils';
 
-declare type EditorWorkspaceOption = { src: string };
+declare type EditorWorkspaceOption = {
+  src: string | undefined
+  callback?: () => void
+};
 declare type ExtCanvas = fabric.Canvas & {
   isDragging: boolean;
   lastPosX: number;
@@ -46,6 +49,12 @@ class EditorWorkspace {
 
   // 初始化画布
   _initWorkspace() {
+    if (!this.option.src) {
+      this.width = 1024
+      this.height = 1024
+      this._initRect()
+      return
+    }
     fabric.Image.fromURL(this.option.src, img => {
       img.set({
         type: 'image',
@@ -53,22 +62,31 @@ class EditorWorkspace {
       })
       this.width = img.width
       this.height = img.height
-      const workspace = new fabric.Rect({
-        fill: this.fill,
-        width: this.width,
-        height: this.height,
-        id: 'workspace',
-      });
-
-      workspace.set('selectable', false);
-      workspace.set('hasControls', false);
-      workspace.hoverCursor = 'default';
-      this.canvas.add(workspace);
-      this.canvas.add(img)
-      this.canvas.renderAll();
-      this.workspace = workspace;
-      this.auto();
+      this._initRect(img)
+      // events.emit('getInitialImageHeight',{
+      //   width:this.width,
+      //   height:this.height
+      // })
     })
+  }
+
+  _initRect(img?: fabric.Object) {
+    const workspace = new fabric.Rect({
+      fill: this.fill,
+      width: this.width,
+      height: this.height,
+      id: 'workspace',
+    });
+
+    workspace.set('selectable', false);
+    workspace.set('hasControls', false);
+    workspace.hoverCursor = 'default';
+    this.canvas.add(workspace);
+    if (img) this.canvas.add(img)
+    this.canvas.renderAll();
+    this.workspace = workspace;
+    this.option.callback?.();
+    this.auto();
   }
 
   setBgColor(color: string) {
@@ -104,8 +122,8 @@ class EditorWorkspace {
 
   setSize(width: number, height: number) {
     this._initBackground();
-    this.width = isNumber(width) ? width : + width;
-    this.height = isNumber(height) ? height : + height;
+    this.width = isNumber(width) ? width : +width;
+    this.height = isNumber(height) ? height : +height;
     // 重新设置workspace
     this.workspace = this.canvas
       .getObjects()

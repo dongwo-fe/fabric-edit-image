@@ -10,7 +10,6 @@ const DefaultOptions = {
     fill: '#000000'
   },
   image: {},
-  bgImage: {}
 }
 
 const useAddObject = () => {
@@ -19,16 +18,18 @@ const useAddObject = () => {
    * 新增图片
    * @param item
    */
-  const addImage = useCallback((item) => {
+  const addImage = useCallback((src, options) => {
     if (!workSpace) return
     const scale = workSpace.getScale()
-    fabric.Image.fromURL(item.src, img => {
+    fabric.Image.fromURL(src, img => {
       img.set({
+        ...DefaultOptions.image,
         id: uuid(),
         scaleY: scale,
         scaleX: scale,
         left: (workSpace.width - img.width * scale) / 2,
         top: (workSpace.height - img.height * scale) / 2,
+        ...options
       })
       canvas?.add(img)
       canvas?.setActiveObject(img);

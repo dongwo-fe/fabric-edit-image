@@ -3,11 +3,21 @@ import { CanvasProvider } from './components/Draw'
 import { EditorProvider } from './components/Editor/Context'
 import Editor from './components/Editor';
 
-export const ExampleComponent = () => {
+
+export interface EditImageProps {
+  src?: string
+  onBack?: () => void
+}
+
+export const EditImage: React.FC<EditImageProps> = (props) => {
+  console.log('EditImage')
   return (
     <CanvasProvider>
       <EditorProvider>
-        <Editor/>
+        <Editor
+          onBack={props.onBack}
+          src={props.src}
+        />
       </EditorProvider>
     </CanvasProvider>
   )

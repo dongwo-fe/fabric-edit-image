@@ -6,6 +6,7 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
+
   input {
     width: 36px;
     height: 20px;
@@ -14,12 +15,28 @@
     border: none;
     color: #ffffff;
     font-weight: bold;
+    font-size: var(--input-font-size);
   }
+
   .control {
     display: flex;
     flex-direction: column;
-    img{
+    span {
       cursor: pointer;
+      display: flex;
+      img:nth-child(2) {
+        display: none;
+      }
+
+      &:hover {
+        img:nth-child(1) {
+          display: none;
+        }
+
+        img:nth-child(2) {
+          display: inline;
+        }
+      }
     }
   }
 }

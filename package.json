@@ -1,6 +1,6 @@
 {
   "name": "@dm/edit-image",
-  "version": "1.0.1",
+  "version": "1.0.7",
   "description": "edit image",
   "author": "jiyongsheng",
   "license": "MIT",
@@ -34,10 +34,12 @@
     "@types/file-saver": "^2.0.5",
     "@types/fontfaceobserver": "^2.1.0",
     "@types/jest": "^25.1.4",
+    "@types/jsdom": "^21.1.1",
     "@types/node": "^12.12.38",
     "@types/react": "^16.9.27",
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "17.0.2",
+    "@types/react-loading-overlay": "^1.0.1",
     "@types/resize-observer-browser": "^0.1.7",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
@@ -68,15 +70,14 @@
   ],
   "dependencies": {
     "@dm/http_request": "^2.0.0",
-    "array-move": "^4.0.0",
+    "@dm/img_oss": "^1.1.5",
     "events": "^3.3.0",
     "fabric": "5.3.0",
     "file-saver": "^2.0.5",
     "fontfaceobserver": "^2.3.0",
     "hotkeys-js": "^3.11.2",
-    "rc-select": "^14.7.1",
-    "react-best-gradient-color-picker": "^2.2.22",
     "react-color": "^2.19.3",
+    "react-loading-overlay": "^1.0.1",
     "react-select": "^5.7.4",
     "react-sortable-hoc": "^2.0.0"
   }

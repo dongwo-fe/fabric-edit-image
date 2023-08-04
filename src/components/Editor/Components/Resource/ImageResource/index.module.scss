@@ -42,10 +42,9 @@
   width: var(--dm-resource-content-width);
   box-sizing: border-box;
   padding: 0 10px;
-
+  position: relative;
   span {
     cursor: pointer;
-    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,14 +54,21 @@
     font-size: 14px;
     background: linear-gradient(95deg, #50E2FF 0%, #50BCFF 23%, #536AFF 79%, #613DFF 98%);
   }
+  input {
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+  }
 }
 
 .fileList {
   padding: 0 10px;
   flex: 1;
   overflow: auto;
-  display: flex;
-  flex-wrap: wrap;
   margin-top: 10px;
 }
 
@@ -91,7 +97,7 @@
 }
 
 .fileListItem {
-  display: flex;
+  display: inline-block;
   cursor: pointer;
   width: calc(50% - 5px);
   margin-bottom: 10px;
@@ -102,6 +108,9 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
+    object-fit: cover;
+    background: url("https://juranapp-prod.oss-cn-beijing.aliyuncs.com/file/1639966318079/picture") no-repeat;
+    background-size: cover;
   }
 
   img.more {
@@ -127,11 +136,11 @@
 
 :global {
   .customMenu {
-    padding-top: 12px;
+    //padding-top: 12px;
     position: fixed;
     border-radius: 4px;
     z-index: 100;
-    width: 200px;
+    width: 100px;
     background: #1C1D29;
     box-sizing: border-box;
     border: 1px solid #2B2F3E;

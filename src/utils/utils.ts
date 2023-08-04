@@ -23,10 +23,26 @@ export function retainNumber(value: string | number): string {
   return ('' + value).replace(/[^0-9]/g, '')
 }
 
-export function colorRGBtoHex(color:string) {
+export function colorRGBtoHex(color: string) {
   const rgb = color.split(',');
   const r = parseInt(rgb[0]);
   const g = parseInt(rgb[1]);
   const b = parseInt(rgb[2]);
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+export function arrayMoveMutable(array: Array<any>, fromIndex: number, toIndex: number) {
+  const startIndex = fromIndex < 0 ? array.length + fromIndex : fromIndex;
+
+  if (startIndex >= 0 && startIndex < array.length) {
+    const endIndex = toIndex < 0 ? array.length + toIndex : toIndex;
+    const [item] = array.splice(fromIndex, 1);
+    array.splice(endIndex, 0, item);
+  }
+}
+
+export function arrayMoveImmutable(array: Array<any>, fromIndex: number, toIndex: number) {
+  array = [...array];
+  arrayMoveMutable(array, fromIndex, toIndex);
+  return array;
 }

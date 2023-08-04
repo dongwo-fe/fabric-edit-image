@@ -22,7 +22,7 @@ const Size: React.FC<SizeProps> = ({getActiveObject, showRation}) => {
 
   useEffect(() => {
     getAttr()
-  }, [canvas,getActiveObject])
+  }, [canvas, getActiveObject])
 
   useEffect(() => {
     if (!canvas) return

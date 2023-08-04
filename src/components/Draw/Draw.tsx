@@ -6,8 +6,9 @@ import { Context } from './CanvasContext'
 import useEvents from './hooks/useEvents';
 import EditorWorkspace from '../../core/EditorWorkspace';
 
-const Draw = () => {
-  const {setCanvas, setEditor, setWorkSpace} = useContext(Context)
+
+const Draw:React.FC<{src?:string}> = (props) => {
+  const {setCanvas, setEditor, setWorkSpace, setShow} = useContext(Context)
   useEvents()
   useEffect(() => {
     const canvas = new fabric.Canvas('fabric-canvas', {
@@ -16,8 +17,10 @@ const Draw = () => {
       controlsAboveOverlay: true, // 超出clipPath后仍然展示控制条
       preserveObjectStacking: true,
     })
+    console.log('EditorWorkspace')
     const workSpace = new EditorWorkspace(canvas, {
-      src: 'https://ossprod.jrdaimao.com/file/1690796743935891.jpeg'
+      src: props.src,
+      callback:() => setShow(true)
     })
     const editor = new Editor(canvas)
     setWorkSpace(workSpace)

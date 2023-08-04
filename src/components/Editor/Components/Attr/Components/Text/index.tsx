@@ -7,16 +7,14 @@ import InputNumber from '../../../../InputNumber'
 import { textAlignList, textStyleList } from './config';
 import useAttr from '../../../../../Draw/hooks/useAttr'
 import { SketchPicker } from 'react-color'
+import useChangeFontFamily from '../../../../../Draw/hooks/useChangeFontFamily';
 
 const ColorPicker: any = SketchPicker
 
-const options = [
-  {value: 'chocolate', label: 'Chocolate'},
-  {value: 'strawberry', label: 'Strawberry'},
-  {value: 'vanilla', label: 'Vanilla'},
-];
 
 const TextAttr = () => {
+  const {getActiveObject, setAttr} = useAttr()
+  const {fontList, runChange} = useChangeFontFamily()
   const [fontSize, setFontSize] = useState('12')
   const [color, setColor] = useState('#000000')
   const [visible, setVisible] = useState(false)
@@ -25,10 +23,10 @@ const TextAttr = () => {
   const [incline, setIncline] = useState(false)
   const [align, setAlign] = useState('')
   const [fontStyle, setFontStyle] = useState<any>(null)
-  const {getActiveObject, setAttr} = useAttr()
-
+  const [fontFamily, setFontFamily] = useState(null)
 
   useEffect(() => {
+    // 回显一些属性
     const activeObject = getActiveObject()
     if (!activeObject) return
     setFontSize(activeObject.get('fontSize'))
@@ -38,9 +36,17 @@ const TextAttr = () => {
     setIncline(activeObject.get('fontStyle') === 'italic')
     const fontWeight = activeObject.get('fontWeight')
     const isWeight = fontWeight === 'bold' || fontWeight > 500
+
     setFontWeight(isWeight)
     setFontStyle(isWeight ? textStyleList[1] : textStyleList[0])
-  }, [getActiveObject])
+  }, [getActiveObject, fontList])
+
+  useEffect(() => {
+    const activeObject = getActiveObject()
+    if (!activeObject) return
+    const fontFamily = activeObject.get('fontFamily')
+    setFontFamily(fontList.find(item => item.value === fontFamily))
+  }, [getActiveObject, fontList])
 
   useEffect(() => {
     const el = document.querySelector('#attr-content')
@@ -115,17 +121,31 @@ const TextAttr = () => {
     setFontStyle(item)
     setAttr({fontWeight: item.value})
   }
+  /**
+   * 修改字体
+   * @param item
+   */
+  const onChangeFontFamily = item => {
+    runChange({
+      src: item.url,
+      name: item.value
+    })
+  }
+
   return (
     <div className={style.textArea}>
       <div className={style.title}>文字</div>
       <div className={style.textAreaContent}>
         <div className={style.fontFamily}>
           <Select
+            placeholder='请选择字体'
+            onChange={onChangeFontFamily}
             components={{DropdownIndicator}}
             className={style.select}
             styles={ReactSelectStyles}
             isSearchable={false}
-            options={options}
+            options={fontList}
+            value={fontFamily}
           />
           <div className={style.size}>
             <InputNumber

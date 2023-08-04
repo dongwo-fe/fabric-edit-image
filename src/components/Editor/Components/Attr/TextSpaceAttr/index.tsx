@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Size from '../Components/Size'
 import style from '../WorkSpaceAttr/index.module.scss'
 import Position from '../Components/Pos'

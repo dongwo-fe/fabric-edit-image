@@ -1,11 +1,10 @@
 import React from 'react'
-
-import { ExampleComponent } from '@dm/edit-image'
+import { EditImage } from '@dm/edit-image'
 import '@dm/edit-image/dist/index.css'
 
 const App = () => {
   return <>
-    <ExampleComponent/>
+    <EditImage src='https://ossprod.jrdaimao.com/file/16910321321134.png' />
   </>
 }
 

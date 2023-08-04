@@ -1,5 +1,17 @@
-import { fetch } from './fetch'
+import { fetch, acFetch } from './fetch'
 
 export const getImageList = (data: { userId?: string, phone?: string }) => {
   return fetch.get('/api_editimg/liststock', data);
+}
+
+// 上传图片
+export const postUploadImage = (file: any) => {
+  const form = new FormData();
+  form.append('file', file);
+  return acFetch.post_heads('/api_image/upload', form);
+}
+
+// add image
+export const addImageApi = (data: any) => {
+  return fetch.post('/api_editimg/addstock', data);
 }

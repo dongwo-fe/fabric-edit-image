@@ -1,9 +1,9 @@
 // @ts-nocheck
 import { fabric } from 'fabric';
-const verticalImg = require('./middlecontrol~kBkNOqSV.svg')
-const edgeImg = require('./edgecontrol~rMFmVdxf.svg')
-const rotateImg = require('./rotateicon~rkkXyruI.svg')
-const horizontalImg  = require('./middlecontrolhoz~cWeeNFnW.svg')
+const verticalImg = 'https://ossprod.jrdaimao.com/file/1691055918106919.svg'
+const edgeImg = 'https://ossprod.jrdaimao.com/file/1691055938230666.svg'
+const rotateImg = 'https://ossprod.jrdaimao.com/file/1691055951539173.svg'
+const horizontalImg  = 'https://ossprod.jrdaimao.com/file/1691055964267980.svg'
 /**
  * 实际场景: 在进行某个对象缩放的时候，由于fabricjs默认精度使用的是toFixed(2)。
  * 此处为了缩放的精度更准确一些，因此将NUM_FRACTION_DIGITS默认值改为4，即toFixed(4).

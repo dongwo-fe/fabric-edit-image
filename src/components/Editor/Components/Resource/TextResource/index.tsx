@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React  from 'react'
+import React from 'react'
 import { textList } from './config'
 import styles from './index.module.scss'
 import useAddObject from '../../../../Draw/hooks/useAddObject';
@@ -10,7 +10,7 @@ const TextResource = () => {
   return (
     <div className={styles.textResource}>
       <div className={styles.addShareTextButton}>
-        <span>添加文本框</span>
+        <span onClick={() => addText({...textList[3], title: '文本框'})}>添加文本框</span>
       </div>
       <div className={styles.textList}>
         {
