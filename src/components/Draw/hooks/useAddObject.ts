@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { useCallback, useContext } from 'react';
 import { Context } from '../CanvasContext';
+import { Context as EditorContext } from '../../Editor/Context'
 import { fabric } from 'fabric';
 import { uuid } from '../../../utils/utils';
 
@@ -14,14 +15,20 @@ const DefaultOptions = {
 
 const useAddObject = () => {
   const {workSpace, canvas} = useContext(Context)
+  const {setLoading} = useContext(EditorContext)
   /**
    * 新增图片
    * @param item
    */
   const addImage = useCallback((src, options) => {
     if (!workSpace) return
+    setLoading(true)
     const scale = workSpace.getScale()
     fabric.Image.fromURL(`${src}?t=${Date.now()}`, img => {
+      if (!img.width || !img.height) {
+        setLoading(false)
+        return
+      }
       img.set({
         ...DefaultOptions.image,
         id: uuid(),
@@ -33,8 +40,9 @@ const useAddObject = () => {
       })
       canvas?.add(img)
       canvas?.setActiveObject(img);
-      canvas?.requestRenderAll();
-    }, { crossOrigin: 'anonymous'})
+      canvas?.renderAll();
+      setLoading(false)
+    }, {crossOrigin: 'anonymous'})
   }, [workSpace, canvas])
 
   /**

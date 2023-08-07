@@ -61,7 +61,7 @@ const Size: React.FC<SizeProps> = ({getActiveObject, showRation}) => {
     value = retainNumber(value)
     activeObject.set({height: +value})
     canvas?.renderAll()
-    setWidth(value)
+    setHeight(value)
   }
 
   const changeLock = () => {
@@ -71,11 +71,13 @@ const Size: React.FC<SizeProps> = ({getActiveObject, showRation}) => {
   return (
     <div className={style.size}>
       <Input
+        afterText='像素'
         title='宽度'
         value={width}
         onChange={e => onWidthChange(e.target.value)}
       />
       <Input
+        afterText='像素'
         title='高度'
         value={height}
         onChange={e => onHeightChange(e.target.value)}

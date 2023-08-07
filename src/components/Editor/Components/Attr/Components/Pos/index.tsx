@@ -58,8 +58,18 @@ const Position = () => {
   }
   return (
     <div className={style.position}>
-      <Input value={x} onChange={e => onPositionXChange(e.target.value)} title='X'/>
-      <Input value={y} onChange={e => onPositionYChange(e.target.value)} title='Y'/>
+      <Input
+        afterText='像素'
+        value={x}
+        onChange={e => onPositionXChange(e.target.value)}
+        title='X'
+      />
+      <Input
+        afterText='像素'
+        value={y}
+        onChange={e => onPositionYChange(e.target.value)}
+        title='Y'
+      />
       <div className={style.rotate}>
         <div className={style.title}>旋转</div>
         <div className={style.content}>

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Input from '../../../../Input'
+import customInputStyle from '../../../../Input/index.module.scss'
 import style from './index.module.scss'
-import useAttr from '../../../../../Draw/hooks/useAttr';
-import { Context } from '../../../../../Draw';
+import useAttr from '../../../../../Draw/hooks/useAttr'
+import { Context } from '../../../../../Draw'
 
 const Transparent = () => {
   const {canvas} = useContext(Context)
@@ -43,7 +43,17 @@ const Transparent = () => {
   }
   return (
     <div className={style.transparent}>
-      <Input value={opacity} onChange={e => onOpacityChange(e.target.value)} title='不透明度'/>
+      <div className={customInputStyle.customInput}>
+        <div className={customInputStyle.title}>不透明度</div>
+        <div className={customInputStyle.inputWrap}>
+          <input
+            style={{width: 64}}
+            onChange={e => onOpacityChange(e.target.value)}
+            value={opacity}
+            type="text"
+          />
+        </div>
+      </div>
       <div className={style.reverse}>
         <div className={style.title}>翻转</div>
         <div className={style.reverseWrap}>

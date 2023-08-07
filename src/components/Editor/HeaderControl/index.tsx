@@ -108,7 +108,7 @@ const HeaderControl = () => {
     historyFlagRef.current = true
     go(1);
   };
-
+  if (!show) return null
   return (
     <div className={styles.headerControl}>
       <div>
