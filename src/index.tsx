@@ -10,7 +10,6 @@ export interface EditImageProps {
 }
 
 export const EditImage: React.FC<EditImageProps> = (props) => {
-  console.log('EditImage')
   return (
     <CanvasProvider>
       <EditorProvider>

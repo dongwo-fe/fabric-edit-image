@@ -62,10 +62,10 @@ class EditorWorkspace {
         left: 0.5,
         top: 0.5,
       })
-      this.width = img.width
-      this.height = img.height
+      this.width = img.width || 1024
+      this.height = img.height || 1024
       this._initRect(img)
-    }, { crossOrigin: 'anonymous'})
+    }, {crossOrigin: 'anonymous'})
   }
 
   _initRect(img?: fabric.Object) {
@@ -80,7 +80,9 @@ class EditorWorkspace {
     workspace.set('hasControls', false);
     workspace.hoverCursor = 'default';
     this.canvas.add(workspace);
-    if (img) this.canvas.add(img)
+    if (img && img.width && img.height) {
+      this.canvas.add(img)
+    }
     this.canvas.renderAll();
     this.workspace = workspace;
     this.option.callback?.();

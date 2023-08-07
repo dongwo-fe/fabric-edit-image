@@ -3,7 +3,7 @@ import ImportFile from './ImportFile'
 import HeaderControl from './HeaderControl'
 import SaveButton from './SaveButton'
 import ResourceArea from './ResourceArea'
-import Draw from '../Draw'
+import Draw, { Context } from '../Draw'
 import { Context as EditorContext } from './Context'
 import AttrArea from './AttrArea'
 import LoadingOverlay from 'react-loading-overlay'
@@ -13,7 +13,7 @@ import { isUrl } from '../../utils';
 
 const Editor: React.FC<EditImageProps> = (props) => {
   const {loading, loadingText, setLoading} = useContext(EditorContext)
-
+  const {show} = useContext(Context)
   useEffect(() => {
     if (isUrl(props.src)) {
       setLoading(true)
@@ -39,7 +39,7 @@ const Editor: React.FC<EditImageProps> = (props) => {
         {/* 导入文件 */}
         <ImportFile onBack={props.onBack}/>
         {/* 快捷操作 */}
-        <HeaderControl/>
+        {show ? <HeaderControl/> : null}
         {/* 保存 */}
         <SaveButton src={props.src}/>
       </div>

@@ -2,13 +2,13 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Context } from '../../Draw'
 import { events, Types } from '../../../utils/events'
-import useHistoryTravel from '../../../hooks/useHistoryTravel';
-import { KeyNames } from '../../../utils/hotEventKeys';
-import { hotkeys } from '../../../core/initHotKeys';
+import useHistoryTravel from '../../../hooks/useHistoryTravel'
+import { KeyNames } from '../../../utils/hotEventKeys'
+import { hotkeys } from '../../../core/initHotKeys'
 import styles from './styles.module.scss'
 
 const HeaderControl = () => {
-  const {workSpace, drawMode, setDrawMode, canvas, editor, show} = useContext(Context)
+  const {workSpace, drawMode, setDrawMode, canvas, editor} = useContext(Context)
   const [scale, setScale] = useState(0)
   const drawModeRef = useRef('default')
   const historyFlagRef = useRef(false)
@@ -18,13 +18,11 @@ const HeaderControl = () => {
     canvas?.on({
       'object:added': save,
       'object:modified': save,
-      'selection:updated': save,
     })
     return () => {
       canvas?.off({
         'object:added': save,
         'object:modified': save,
-        'selection:updated': save,
       })
     }
   }, [canvas, workSpace])
@@ -62,13 +60,13 @@ const HeaderControl = () => {
   useEffect(() => {
     if (!workSpace || !editor) return
     reset(editor.getJson());
-  }, [editor, workSpace, show])
+  }, [editor, workSpace])
 
   const save = (event: any) => {
     // 过滤选择元素事件
     const isSelect = event.action === undefined && event.e;
-    if (isSelect || !canvas) return;
-    if (historyFlagRef.current) return;
+    if (isSelect || !canvas) return
+    if (historyFlagRef.current) return
     setValue(editor?.getJson())
   }
   const onKeyDown = (e: any) => {
@@ -108,7 +106,6 @@ const HeaderControl = () => {
     historyFlagRef.current = true
     go(1);
   };
-  if (!show) return null
   return (
     <div className={styles.headerControl}>
       <div>

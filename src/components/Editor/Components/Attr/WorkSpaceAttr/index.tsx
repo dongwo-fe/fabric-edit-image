@@ -24,7 +24,11 @@ const WorkSpaceAttr = () => {
         </div>
         <div>
           <div className={style.title}>背景色</div>
-          <ColorPicker color={color} onChange={onChangeColor}/>
+          <ColorPicker
+            color={color}
+            onChange={onChangeColor}
+            className={style.colorPicker}
+          />
         </div>
       </div>
     </div>

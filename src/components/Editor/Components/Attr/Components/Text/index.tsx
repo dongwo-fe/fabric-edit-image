@@ -4,10 +4,10 @@ import style from './index.module.scss'
 import Select from 'react-select'
 import { ReactSelectStyles, DropdownIndicator } from '../../../../Select'
 import InputNumber from '../../../../InputNumber'
-import { textAlignList, textStyleList } from './config';
+import { textAlignList, textStyleList } from './config'
 import useAttr from '../../../../../Draw/hooks/useAttr'
 import { SketchPicker } from 'react-color'
-import useChangeFontFamily from '../../../../../Draw/hooks/useChangeFontFamily';
+import useChangeFontFamily from '../../../../../Draw/hooks/useChangeFontFamily'
 
 const ColorPicker: any = SketchPicker
 
@@ -217,6 +217,7 @@ const TextAttr = () => {
       {
         visible ? <div className={style.fixColorPicker}>
           <ColorPicker
+            className={style.colorPicker}
             onChangeComplete={onChangeComplete}
             color={color}
           />

@@ -166,3 +166,35 @@
     }
   }
 }
+
+.colorPicker {
+  background: #1C1D29 !important;
+  box-shadow: none !important;
+  padding: 10px !important;
+  div:nth-child(1) {
+    border-radius: 4px;
+  }
+  :global {
+    .flexbox-fix {
+      border-top: none !important;
+    }
+
+    label {
+      color: #6A6A76 !important;
+      padding-top: 10px !important;
+      font-size: 12px !important;
+      font-weight: bold !important;
+    }
+
+    input {
+      outline: none !important;
+      background: #232634 !important;
+      border-radius: 2px !important;
+      color: #FFFFFF !important;
+      font-size: 12px !important;
+      font-weight: bold !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
