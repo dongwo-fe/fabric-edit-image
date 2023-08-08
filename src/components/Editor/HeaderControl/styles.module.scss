@@ -11,14 +11,6 @@
     align-items: center;
   }
 
-  > div:not(:last-child):after {
-    content: '';
-    width: 1px;
-    height: 16px;
-    background: #101224;
-    display: inline-block;
-    margin: 0 8px;
-  }
 }
 
 .button {
@@ -56,4 +48,12 @@
   color: #ADADB3;
   font-size: 14px;
   min-width: 40px;
+}
+
+.line {
+  width: 1px;
+  height: 16px;
+  background: #101224;
+  display: inline-block;
+  margin: 0 8px;
 }

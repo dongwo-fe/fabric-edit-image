@@ -13,6 +13,7 @@ const WorkSpaceAttr = () => {
   const [color, setColor] = useState(workSpace?.fill || DefaultWorkSpaceColor)
   const onChangeColor = (e) => {
     setColor(e.hex)
+    console.log('change bg color e.hex', e.hex)
     workSpace?.setBgColor(e.hex)
   }
   return (
@@ -20,7 +21,7 @@ const WorkSpaceAttr = () => {
       <div className={style.base}>
         <div>
           {/* 设置元素的大小、锁定比例 */}
-          <Size getActiveObject={() => workSpace?.workspace}/>
+          <Size isWorkSpace getActiveObject={() => workSpace?.workspace}/>
         </div>
         <div>
           <div className={style.title}>背景色</div>
