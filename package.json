@@ -1,6 +1,6 @@
 {
   "name": "@dm/edit-image",
-  "version": "1.0.20",
+  "version": "1.0.22",
   "description": "edit image",
   "author": "jiyongsheng",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^17.0.1"
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
