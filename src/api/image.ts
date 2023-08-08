@@ -26,3 +26,7 @@ export const delstock = (data: any) => {
   return fetch.get('/api_editimg/delstock', data);
 }
 
+export const getDetail = (data:any) => {
+  return fetch.get('/api_editimg/detail', data);
+}
+

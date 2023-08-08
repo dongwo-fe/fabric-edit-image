@@ -1,11 +1,17 @@
+// @ts-nocheck
 import { fabric } from 'fabric';
 import { throttle, uuid } from '../utils/utils';
 import { events, Types } from '../utils/events';
 import { isNumber } from '../utils';
+import { canvas } from 'file-saver';
+
+const DefaultWidth = 1024
+const DefaultHeight = 1024
 
 declare type EditorWorkspaceOption = {
   src: string | undefined
   callback?: () => void
+  canvasData: any
 };
 declare type ExtCanvas = fabric.Canvas & {
   isDragging: boolean;
@@ -49,21 +55,40 @@ class EditorWorkspace {
 
   // 初始化画布
   _initWorkspace() {
-    if (!this.option.src) {
-      this.width = 1024
-      this.height = 1024
+    const {src, canvasData, callback} = this.option
+    // 如果canvasData有数据的话这里要走反显逻辑
+    if (canvasData && canvasData.objects.length) {
+      const rectOptions = canvasData.objects.find(item => item.type === 'rect')
+      this.width = rectOptions.width
+      this.height = this.height = rectOptions.height
+      this.fill = rectOptions.fill
+      this.canvas.loadFromJSON(canvasData, () => {
+        const workspace = this.canvas.getObjects().find((item) => item.id === 'workspace')
+        workspace.set('selectable', false)
+        workspace.set('hasControls', false)
+        this.setSize(workspace.width as number, workspace.height as number)
+        this.canvas.renderAll()
+        callback()
+      })
+      return;
+    }
+    if (!src) {
+      // 如果没有传入图片url，用默认宽高生成背景
+      this.width = DefaultWidth
+      this.height = DefaultHeight
       this._initRect()
       return
     }
-    fabric.Image.fromURL(this.option.src, img => {
+
+    fabric.Image.fromURL(src, img => {
       img.set({
         type: 'image',
-        id: uuid(),
         left: 0.5,
         top: 0.5,
+        id: 'mainImg'
       })
-      this.width = img.width || 1024
-      this.height = img.height || 1024
+      this.width = img.width || DefaultWidth
+      this.height = img.height || DefaultHeight
       this._initRect(img)
     }, {crossOrigin: 'anonymous'})
   }
@@ -81,6 +106,7 @@ class EditorWorkspace {
     workspace.hoverCursor = 'default';
     this.canvas.add(workspace);
     if (img && img.width && img.height) {
+      // 如果图片加载失败，不添加到画布中
       this.canvas.add(img)
     }
     this.canvas.renderAll();

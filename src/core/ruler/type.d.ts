@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import type CanvasRuler, { Rect } from './ruler';
+// @ts-nocheck
+import type CanvasRuler from './ruler';
+import type { Rect } from './ruler';
 
 declare module 'fabric/fabric-impl' {
   type EventNameExt = 'removed' | EventName;

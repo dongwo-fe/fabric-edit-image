@@ -62,7 +62,7 @@ const useAddObject = () => {
     })
     canvas?.add(text)
     canvas?.setActiveObject(text)
-    canvas?.requestRenderAll();
+    canvas?.renderAll();
   }, [workSpace, canvas])
   return {
     addImage,

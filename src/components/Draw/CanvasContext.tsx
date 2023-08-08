@@ -25,6 +25,8 @@ interface CanvasContext {
   setSelectActive: (value: Array<string>) => void
   show: boolean
   setShow: (value: boolean) => void
+  mainUrl: string | undefined
+  setMainUrl: (value: string | undefined) => void
 }
 
 export const Context = createContext<CanvasContext>({
@@ -37,6 +39,8 @@ export const Context = createContext<CanvasContext>({
   selectOneType: '',
   selectActive: [],
   show: false,
+  mainUrl: '',
+  setMainUrl: noop,
   setSelectOneType: noop,
   setSelectActive: noop,
   setSelectMode: noop,
@@ -58,6 +62,7 @@ export const CanvasProvider: FC = ({children}) => {
   const [selectOneType, setSelectOneType] = useState('')
   const [selectActive, setSelectActive] = useState([])
   const [show, setShow] = useState(false)
+  const [mainUrl,setMainUrl] = useState('')
   const context = {
     canvas,
     editor,
@@ -76,7 +81,9 @@ export const CanvasProvider: FC = ({children}) => {
     setCanvas,
     setEditor,
     show,
-    setShow
+    setShow,
+    mainUrl,
+    setMainUrl
   }
 
   // @ts-ignore

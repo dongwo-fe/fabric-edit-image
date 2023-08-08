@@ -8,7 +8,7 @@ function initHotkeys(canvas: fabric.Canvas) {
     const activeObject = canvas.getActiveObjects();
     if (activeObject) {
       activeObject.map((item) => canvas.remove(item));
-      canvas.requestRenderAll();
+      canvas.renderAll();
       canvas.discardActiveObject();
     }
   }
