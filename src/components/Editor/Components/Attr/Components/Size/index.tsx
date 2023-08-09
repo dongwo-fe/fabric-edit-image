@@ -9,12 +9,13 @@ import useLock, { isControlsInRatioVisible } from '../../../../../Draw/hooks/use
 
 
 interface SizeProps {
-  getActiveObject: () => fabric.Object
+  getActiveObject?: () => fabric.Object
+  isWorkSpace?: boolean
   showRation?: boolean
 }
 
-const Size: React.FC<SizeProps> = ({getActiveObject, showRation}) => {
-  const {canvas} = useContext(Context)
+const Size: React.FC<SizeProps> = ({getActiveObject, showRation, isWorkSpace}) => {
+  const {canvas, workSpace} = useContext(Context)
   const {changeInRatioLock} = useLock()
   const [width, setWidth] = useState('')
   const [height, setHeight] = useState('')
@@ -47,6 +48,11 @@ const Size: React.FC<SizeProps> = ({getActiveObject, showRation}) => {
     const activeObject = getActiveObject()
     if (!activeObject) return
     value = retainNumber(value)
+    if (isWorkSpace) {
+      workSpace?.setSize(value, height)
+      setWidth(value)
+      return;
+    }
     activeObject.set({width: +value})
     canvas?.renderAll()
     setWidth(value)
@@ -59,6 +65,11 @@ const Size: React.FC<SizeProps> = ({getActiveObject, showRation}) => {
     const activeObject = getActiveObject()
     if (!activeObject) return
     value = retainNumber(value)
+    if (isWorkSpace) {
+      workSpace?.setSize(width, value)
+      setHeight(value)
+      return;
+    }
     activeObject.set({height: +value})
     canvas?.renderAll()
     setHeight(value)

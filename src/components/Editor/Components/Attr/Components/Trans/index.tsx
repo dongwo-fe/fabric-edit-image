@@ -47,11 +47,12 @@ const Transparent = () => {
         <div className={customInputStyle.title}>不透明度</div>
         <div className={customInputStyle.inputWrap}>
           <input
-            style={{width: 64}}
+            style={{width: 48}}
             onChange={e => onOpacityChange(e.target.value)}
             value={opacity}
             type="text"
           />
+          <span>%</span>
         </div>
       </div>
       <div className={style.reverse}>

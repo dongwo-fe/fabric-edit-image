@@ -117,7 +117,6 @@ const ImageResource = () => {
           {
             list.map((item) => {
               return <div
-
                 key={item._id}
                 className={styles.fileListItem}
               >
@@ -125,6 +124,7 @@ const ImageResource = () => {
                   onDragStart={onDragStart}
                   onError={e => {
                     e.target.style.cursor = 'not-allowed'
+                    e.target.style.pointerEvents = 'none'
                     e.target.src = 'https://juranapp-prod.oss-cn-beijing.aliyuncs.com/file/1639966318079/picture'
                   }}
                   onClick={() => addImage(item.imgSrc)}
