@@ -80,8 +80,5 @@
     "react-loading-overlay": "^1.0.1",
     "react-select": "^5.7.4",
     "react-sortable-hoc": "^2.0.0"
-  },
-  "resolutions": {
-    "canvas": "2.7.0"
   }
 }
