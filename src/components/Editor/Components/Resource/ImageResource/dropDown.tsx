@@ -31,8 +31,8 @@ export const useDropDown = () => {
   }, [])
 
   const removeEl = useCallback((e) => {
-    console.log(e.target, clickRef.current, shareEl.current)
-    if (e?.target === clickRef?.current) return
+    console.log(e?.target, clickRef.current, shareEl.current)
+    if (e?.target === clickRef.current) return
     if (shareEl.current) {
       document.body.removeChild(shareEl.current)
       shareEl.current = null

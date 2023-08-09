@@ -5,7 +5,6 @@ import { saveAs } from 'file-saver'
 import styles from './index.module.scss'
 import { uuid } from '../../../utils/utils'
 import { saveHistory } from '../../../api/image'
-import { Tooltip } from 'react-tooltip'
 
 const SaveButton = ({src}: { src: string | undefined }) => {
   const userInfo = localStorage.getItem('userInfo')
@@ -87,13 +86,9 @@ const SaveButton = ({src}: { src: string | undefined }) => {
       {/*</span>*/}
       <span className={styles.saveWrap}>
         <span
-          data-tooltip-id="my-tooltip"
-          data-tooltip-content="Hello world!"
-          data-tooltip-place="top"
           onClick={onSave}
           className={styles.saveButton}
         >保&nbsp;存</span>
-        <Tooltip anchorSelect='my-tooltip' />
         {/*<span className={`${styles.fixButton} ${show ? styles.showButton : ''}`}>*/}
         {/*<span onClick={onSaveToJson}>保存</span>*/}
         {/*<span onClick={onSaveToImage}>保存为图片</span>*/}
