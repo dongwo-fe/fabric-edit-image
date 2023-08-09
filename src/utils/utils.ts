@@ -20,6 +20,7 @@ export function uuid(): string {
 }
 
 export function retainNumber(value: string | number): string {
+  if (!value) return '0'
   const result = ('' + value).replace(/[^0-9]/g, '')
   return Number(result) + ''
 }

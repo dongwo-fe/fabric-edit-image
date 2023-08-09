@@ -3,6 +3,7 @@ import style from './index.module.scss'
 import Input from '../../../../Input'
 import useAttr from '../../../../../Draw/hooks/useAttr';
 import { Context } from '../../../../../Draw';
+import { retainNumber } from '../../../../../../utils/utils';
 
 const Position = () => {
   const {canvas} = useContext(Context)
@@ -45,6 +46,7 @@ const Position = () => {
    * @param value
    */
   const onPositionXChange = (value: string) => {
+    value = retainNumber(value)
     setAttr({left: +value})
     setX(value)
   }
@@ -53,6 +55,7 @@ const Position = () => {
    * @param value
    */
   const onPositionYChange = (value: string) => {
+    value = retainNumber(value)
     setAttr({top: +value})
     setY(value)
   }
@@ -73,7 +76,7 @@ const Position = () => {
       <div className={style.rotate}>
         <div className={style.title}>旋转</div>
         <div className={style.content}>
-          <input value={rotate} onChange={e => onRotateChange(e.target.value)} type="text"/>
+          <input value={rotate} onChange={e => onRotateChange(retainNumber(e.target.value))} type="text"/>
         </div>
       </div>
     </div>
