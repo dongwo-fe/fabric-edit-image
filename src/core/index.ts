@@ -20,12 +20,16 @@ class Editor extends EventEmitter {
   editorWorkspace: EditorWorkspace | null;
   centerAlign: InitCenterAlign;
   ruler: CanvasRuler;
+  disableGuidelines: () => void
+  enableGuidelines: () => void
+
   constructor(canvas: fabric.Canvas) {
     super();
     this.canvas = canvas;
     this.editorWorkspace = null;
-
-    initAligningGuidelines(canvas);
+    const {disable, enable} = initAligningGuidelines(canvas);
+    this.disableGuidelines = disable
+    this.enableGuidelines = enable
     initHotkeys(canvas, this);
     initControls(canvas);
     initControlsRotate(canvas);
@@ -145,7 +149,7 @@ class Editor extends EventEmitter {
    * @param {Object} item
    */
   dragAddItem(event: DragEvent, item: fabric.Object) {
-    const { left, top } = this.canvas.getSelectionElement().getBoundingClientRect();
+    const {left, top} = this.canvas.getSelectionElement().getBoundingClientRect();
     if (event.x < left || event.y < top || item.width === undefined) return;
 
     const point = {

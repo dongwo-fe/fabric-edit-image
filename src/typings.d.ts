@@ -30,5 +30,4 @@ declare global {
     }
   }
 }
-
 declare module 'react-sortable-hoc'

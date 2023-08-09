@@ -1,6 +1,6 @@
 {
   "name": "@dm/edit-image",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "edit image",
   "author": "jiyongsheng",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^18.2.0"
+    "react": "^17.0.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -72,6 +72,7 @@
     "@dm/http_request": "^2.0.0",
     "@dm/img_oss": "^1.1.5",
     "events": "^3.3.0",
+    "fabric": "5.3.0",
     "file-saver": "^2.0.5",
     "fontfaceobserver": "^2.3.0",
     "hotkeys-js": "^3.11.2",

@@ -27,7 +27,7 @@
     display: none;
   }
 
-  &:hover,&.active {
+  &:hover, &.active {
     background: #2C375E;
 
     img:nth-child(1) {
@@ -38,6 +38,7 @@
       display: inline;
     }
   }
+
   &.disabled {
     cursor: not-allowed;
   }
@@ -56,4 +57,11 @@
   background: #101224;
   display: inline-block;
   margin: 0 8px;
+}
+
+.reactTooltip {
+  display: none;
+  background: red;
+  //display: none;
+  //z-index: 2000;
 }

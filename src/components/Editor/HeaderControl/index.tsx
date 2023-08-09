@@ -15,6 +15,7 @@ const HeaderControl = () => {
   const historyFlagRef = useRef(false)
   drawModeRef.current = drawMode
   const {value, setValue, go, reset, backLength, forwardLength} = useHistoryTravel<any>(undefined, 50)
+
   useEffect(() => {
     canvas?.on({
       'object:added': save,
@@ -45,6 +46,12 @@ const HeaderControl = () => {
       canvas.renderAll();
     });
   }, [value, canvas])
+
+  useEffect(() => {
+    if (workSpace.scale) {
+      setScale(Math.round(workSpace.scale * 100))
+    }
+  }, [workSpace.scale])
 
   useEffect(() => {
     events.on(Types.CHANGE_SCALE, scale => {
@@ -83,6 +90,7 @@ const HeaderControl = () => {
    * 开启拖拽模式
    */
   const switchDragMode = () => {
+    editor?.disableGuidelines?.()
     workSpace?.startDring()
     setDrawMode('move')
   }
@@ -90,6 +98,7 @@ const HeaderControl = () => {
    * 恢复默认模式
    */
   const switchDefaultMode = () => {
+    editor?.enableGuidelines?.()
     workSpace?.endDring()
     setDrawMode('default')
   }
@@ -109,7 +118,7 @@ const HeaderControl = () => {
   };
   return (
     <div className={styles.headerControl}>
-      <Tooltip anchorSelect='#control-tooltip' />
+      <Tooltip style={{zIndex: 1060}} className={styles.reactTooltip} anchorSelect='#control-tooltip'/>
       <div>
         {/* 撤销 */}
         <div
@@ -144,7 +153,7 @@ const HeaderControl = () => {
           <img src="https://ossprod.jrdaimao.com/file/1690509942889198.svg" alt=""/>
         </div>
       </div>
-      <div className={styles.line} />
+      <div className={styles.line}/>
       <div>
         {/* 拖拽 */}
         <div
@@ -169,7 +178,7 @@ const HeaderControl = () => {
           <img src="https://ossprod.jrdaimao.com/file/1690509961015895.svg" alt=""/>
         </div>
       </div>
-      <div className={styles.line} />
+      <div className={styles.line}/>
       <div>
         {/* 放大 */}
         <div

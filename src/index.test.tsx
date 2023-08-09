@@ -1,7 +1,7 @@
-import { ExampleComponent } from '.'
+import { EditImage } from '.'
 
-describe('ExampleComponent', () => {
+describe('EditImage', () => {
   it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
+    expect(EditImage).toBeTruthy()
   })
 })
