@@ -121,7 +121,8 @@ const ImageResource = () => {
                 className={styles.fileListItem}
               >
                 <img
-                  onDragStart={onDragStart}
+                  draggable={false}
+                  // onDragStart={onDragStart}
                   onError={e => {
                     e.target.style.cursor = 'not-allowed'
                     e.target.style.pointerEvents = 'none'

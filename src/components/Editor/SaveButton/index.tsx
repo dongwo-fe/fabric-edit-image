@@ -88,7 +88,7 @@ const SaveButton = ({src}: { src: string | undefined }) => {
         <span
           onClick={onSave}
           className={styles.saveButton}
-        >保&nbsp;存</span>
+        >下&nbsp;载</span>
         {/*<span className={`${styles.fixButton} ${show ? styles.showButton : ''}`}>*/}
         {/*<span onClick={onSaveToJson}>保存</span>*/}
         {/*<span onClick={onSaveToImage}>保存为图片</span>*/}
