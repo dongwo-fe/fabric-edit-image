@@ -64,7 +64,11 @@
 
     .text {
       color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-size: 14px;
+      max-width: 100px;
     }
 
     .image {

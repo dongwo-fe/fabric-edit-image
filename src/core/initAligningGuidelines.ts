@@ -14,6 +14,7 @@ declare interface HorizontalLine {
 }
 
 function initAligningGuidelines(canvas: fabric.Canvas) {
+  let disabled = false
   const ctx = canvas.getSelectionContext();
   const aligningLineOffset = 5;
   const aligningLineMargin = 4;
@@ -41,7 +42,7 @@ function initAligningGuidelines(canvas: fabric.Canvas) {
   }
 
   function drawLine(x1: number, y1: number, x2: number, y2: number) {
-    if (viewportTransform == null) return;
+    if (viewportTransform == null || disabled) return;
 
     ctx.save();
     ctx.lineWidth = aligningLineWidth;
@@ -92,7 +93,7 @@ function initAligningGuidelines(canvas: fabric.Canvas) {
     // It should be trivial to DRY this up by encapsulating (repeating) creation of x1, x2, y1, and y2 into functions,
     // but we're not doing it here for perf. reasons -- as this a function that's invoked on every mouse move
 
-    for (let i = canvasObjects.length; i--; ) {
+    for (let i = canvasObjects.length; i--;) {
       // eslint-disable-next-line no-continue
       if (canvasObjects[i] === activeObject) continue;
 
@@ -257,10 +258,10 @@ function initAligningGuidelines(canvas: fabric.Canvas) {
   });
 
   canvas.on('after:render', () => {
-    for (let i = verticalLines.length; i--; ) {
+    for (let i = verticalLines.length; i--;) {
       drawVerticalLine(verticalLines[i]);
     }
-    for (let j = horizontalLines.length; j--; ) {
+    for (let j = horizontalLines.length; j--;) {
       drawHorizontalLine(horizontalLines[j]);
     }
 
@@ -274,6 +275,11 @@ function initAligningGuidelines(canvas: fabric.Canvas) {
     horizontalLines.length = 0;
     canvas.renderAll();
   });
+
+  return {
+    disable: () => disabled = true,
+    enable: () => disabled = false
+  }
 }
 
 export default initAligningGuidelines;

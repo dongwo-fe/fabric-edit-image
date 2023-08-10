@@ -1,8 +1,10 @@
+// @ts-nocheck
 import React, { useContext, useEffect, useState } from 'react'
 import customInputStyle from '../../../../Input/index.module.scss'
 import style from './index.module.scss'
 import useAttr from '../../../../../Draw/hooks/useAttr'
 import { Context } from '../../../../../Draw'
+import { retainNumber } from '../../../../../../utils/utils';
 
 const Transparent = () => {
   const {canvas} = useContext(Context)
@@ -12,7 +14,8 @@ const Transparent = () => {
   useEffect(() => {
     const activeObject = getActiveObject()
     if (!activeObject) return
-    setOpacity((activeObject.opacity || 0) * 100)
+    setOpacity(parseInt((activeObject.opacity || 0) * 100))
+    setOpacity((activeObject.opacity * 100).toFixed(0))
     setVisible(activeObject.visible || false)
   }, [getActiveObject])
   /**
@@ -20,7 +23,11 @@ const Transparent = () => {
    * @param value
    */
   const onOpacityChange = (value: string) => {
-    setAttr({opacity: +value / 100})
+    if (value > 100) {
+      value = 100
+    }
+    value = retainNumber(value)
+    setAttr({opacity: (value / 100).toFixed(2)})
     setOpacity(+value)
   }
   /**
@@ -47,11 +54,12 @@ const Transparent = () => {
         <div className={customInputStyle.title}>不透明度</div>
         <div className={customInputStyle.inputWrap}>
           <input
-            style={{width: 64}}
+            style={{width: 48}}
             onChange={e => onOpacityChange(e.target.value)}
             value={opacity}
             type="text"
           />
+          <span>%</span>
         </div>
       </div>
       <div className={style.reverse}>

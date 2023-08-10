@@ -29,6 +29,7 @@ class EditorWorkspace {
   fill: string;
   width: number | undefined
   height: number | undefined
+  scale: number
 
   constructor(canvas: fabric.Canvas, option: EditorWorkspaceOption) {
     this.canvas = canvas;
@@ -193,17 +194,25 @@ class EditorWorkspace {
   }
 
   // 放大
-  big() {
+  big(value: number) {
     let zoomRatio = this.canvas.getZoom();
-    zoomRatio += 0.05;
+    zoomRatio += value || 0.05;
+    if (zoomRatio >= 3) {
+      zoomRatio = 3
+    }
+    events.emit(Types.CHANGE_SCALE, zoomRatio)
     const center = this.canvas.getCenter();
     this.canvas.zoomToPoint(new fabric.Point(center.left, center.top), zoomRatio);
   }
 
   // 缩小
-  small() {
+  small(value: number) {
     let zoomRatio = this.canvas.getZoom();
-    zoomRatio -= 0.05;
+    zoomRatio -= value || 0.05;
+    if (zoomRatio <= 0.1) {
+      zoomRatio = 0.1
+    }
+    events.emit(Types.CHANGE_SCALE, zoomRatio)
     const center = this.canvas.getCenter();
     this.canvas.zoomToPoint(
       new fabric.Point(center.left, center.top),
@@ -215,6 +224,7 @@ class EditorWorkspace {
   auto() {
     const scale = this.getScale();
     if (scale) {
+      this.scale = scale
       events.emit(Types.CHANGE_SCALE, scale)
       this.setZoomAuto(scale);
     }

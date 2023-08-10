@@ -14,7 +14,10 @@ const SaveButton = () => {
       {/*  <span>预览</span>*/}
       {/*</span>*/}
       <span className={styles.saveWrap}>
-        <span onClick={() => saveToImage()} className={styles.saveButton}>保&nbsp;存</span>
+        <span
+          onClick={() => saveToImage()}
+          className={styles.saveButton}
+        >下&nbsp;载</span>
         {/*<span className={`${styles.fixButton} ${show ? styles.showButton : ''}`}>*/}
         {/*<span onClick={onSaveToJson}>保存</span>*/}
         {/*<span onClick={onSaveToImage}>保存为图片</span>*/}

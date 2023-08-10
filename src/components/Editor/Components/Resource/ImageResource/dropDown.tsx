@@ -4,13 +4,14 @@ import { saveAs } from 'file-saver';
 import { delstock } from '../../../../../api/image';
 import { Context } from '../../../Context';
 
-let shareEl = null
 
 export const useDropDown = () => {
   const clickRef = useRef()
   const cacheItem = useRef()
   const [show, setShow] = useState(false)
   const {setLoading} = useContext(Context)
+  const shareEl = useRef()
+
 
   useEffect(() => {
     const el = document.querySelector('#img-file-list')
@@ -24,15 +25,16 @@ export const useDropDown = () => {
   useEffect(() => {
     window.addEventListener('click', removeEl)
     return () => {
+      removeEl()
       window.removeEventListener('click', removeEl)
     }
   }, [])
 
   const removeEl = useCallback((e) => {
-    if (e?.target === clickRef?.current) return
-    if (shareEl) {
-      document.body.removeChild(shareEl)
-      shareEl = null
+    if (e?.target === clickRef.current) return
+    if (shareEl.current) {
+      document.body.removeChild(shareEl.current)
+      shareEl.current = null
       setShow(false)
     }
   }, [])
@@ -57,14 +59,14 @@ export const useDropDown = () => {
   const run = (e: any, item: any) => {
     setShow(true)
     cacheItem.current = item
-    if (shareEl) {
-      document.body.removeChild(shareEl)
-      shareEl = null
+    if (shareEl.current) {
+      document.body.removeChild(shareEl.current)
+      shareEl.current = null
     }
     clickRef.current = e.target;
     const parentNode = e.target.parentNode
     const {top, left} = parentNode.getBoundingClientRect()
-    const div = shareEl = document.createElement('div')
+    const div = shareEl.current = document.createElement('div')
     div.addEventListener('click', onClick)
     div.innerHTML = `<div class='customMenu' style='left:${left + parentNode.offsetWidth + 10}px;top:${top}px'>
 <!--    <div class='editName'>-->
