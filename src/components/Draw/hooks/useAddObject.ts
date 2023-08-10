@@ -52,6 +52,7 @@ const useAddObject = () => {
     if (!workSpace) return
     const text = new fabric.Textbox(item.title, {
       ...DefaultOptions.text,
+      fontFamily: 'serif',
       fontSize: item.style.fontSize as number * 3,
       fontWeight: item.style.fontWeight as number,
       id: uuid(),

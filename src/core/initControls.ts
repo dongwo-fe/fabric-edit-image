@@ -2,7 +2,7 @@
 import { fabric } from 'fabric';
 const verticalImg = 'https://ossprod.jrdaimao.com/file/1691055918106919.svg'
 const edgeImg = 'https://ossprod.jrdaimao.com/file/1691055938230666.svg'
-const rotateImg = 'https://ossprod.jrdaimao.com/file/1691055951539173.svg'
+const rotateImg = 'https://ossprod.jrdaimao.com/file/1691574701262500.svg'
 const horizontalImg  = 'https://ossprod.jrdaimao.com/file/1691055964267980.svg'
 /**
  * 实际场景: 在进行某个对象缩放的时候，由于fabricjs默认精度使用的是toFixed(2)。
@@ -143,6 +143,7 @@ function peakControl() {
 
 // 旋转
 function rotationControl() {
+  console.log('rotationControl')
   const img = document.createElement('img');
   img.src = rotateImg;
   function renderIconRotate(
@@ -154,15 +155,15 @@ function rotationControl() {
   ) {
     drawImg(ctx, left, top, img, 40, 40, fabricObject.angle);
   }
+
   // 旋转图标
-  fabric.Object.prototype.controls.mtr = new fabric.Control({
-    x: 0,
+  fabric.Object.prototype.controls.rotate = new fabric.Control({
     y: 0.5,
     cursorStyleHandler: fabric.controlsUtils.rotationStyleHandler,
     actionHandler: fabric.controlsUtils.rotationWithSnapping,
-    offsetY: 30,
-    // withConnecton: false,
+    offsetY: 20,
     actionName: 'rotate',
+    cursorStyle: 'pointer',
     render: renderIconRotate,
   });
 }

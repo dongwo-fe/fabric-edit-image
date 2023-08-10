@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, useRef } from 'react'
 import styles from './styles.module.css'
 import { fabric } from 'fabric'
 import Editor from '../../core';
@@ -12,18 +12,21 @@ import { LocalKeys } from '../../utils/local/keys';
 import { getDetail } from '../../api/image';
 import { loadImage } from '../../utils/tool';
 import useSave from './hooks/useSave';
+import useChangeFontFamily from './hooks/useChangeFontFamily';
 
 
 const Draw: React.FC<{ src?: string }> = (props) => {
   const {setCanvas, setEditor, setWorkSpace, setShow, setMainUrl} = useContext(Context)
   const {setLoading} = useContext(EditorContext)
+  const {loadFont, fontLoaded} = useChangeFontFamily()
   const {unloadSendBeacon} = useSave()
   useEvents()
 
   useEffect(() => {
+    if (!fontLoaded) return
     init()
     setMainUrl(props.src)
-  }, [props.src])
+  }, [fontLoaded])
 
   useEffect(() => {
     window.addEventListener('beforeunload', (e) => {
@@ -63,17 +66,15 @@ const Draw: React.FC<{ src?: string }> = (props) => {
       // 缓存中取不到就去看props里是否有
       mainImg = props.src
     }
-
-    // 主图会很大，这里做个loading
-    if (mainImg) {
-      try {
-        setLoading(true)
-        await loadImage(mainImg)
-        setLoading(false)
-      } catch (err) {
-        console.log(`initCanvas load main url error url=${mainImg}`)
-        setLoading(false)
-      }
+    // 主图和字体包会很大，这里做个loading
+    try {
+      setLoading(true)
+      await loadFont(canvasData?.objects)
+      await loadImage(mainImg)
+      setLoading(false)
+    } catch (err) {
+      console.log(`initCanvas error`, err)
+      setLoading(false)
     }
 
     const canvas = new fabric.Canvas('fabric-canvas', {

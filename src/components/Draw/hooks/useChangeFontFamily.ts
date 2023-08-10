@@ -1,17 +1,36 @@
 // @ts-nocheck
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { getFontManage } from '../../../api/text'
 import useAttr from './useAttr'
 import FontFaceObserver from 'fontfaceobserver'
-import {Context} from '../../Editor/Context';
+import { Context } from '../../Editor/Context';
 
+
+// 通用字体，不需要加载字体包
+const GeneralTextList = ['serif']
+// 缓存已经加载过的字体包名称，有重复的引用无需再次架子啊
 const Font = new Map()
+// 缓存字体列表
 let globalFontList = null
+
+/**
+ * 过滤出非通用字体
+ * @param list
+ */
+export const filterToText = (list: any) => {
+  if (!Array.isArray(list)) return []
+  return list.filter((item: any) => item.type === 'textbox' && !GeneralTextList.includes(item.fontFamily))
+}
+
 
 const useChangeFontFamily = () => {
   const {setAttr} = useAttr()
   const {setLoading} = useContext(Context)
   const [fontList, setFontList] = useState([])
+  const [fontLoaded, setFontLoaded] = useState(false)
+  const useFontListLast = useRef()
+  useFontListLast.current = fontList
+
 
   useEffect(() => {
     // 缓存处理下，不用每次加载
@@ -29,6 +48,7 @@ const useChangeFontFamily = () => {
           }
         })
       }
+      setFontLoaded(true)
       globalFontList = list
       setFontList(list)
     })()
@@ -66,13 +86,45 @@ const useChangeFontFamily = () => {
   /**
    * 加载多个字体
    */
-  const loadFont = () => {
+  const loadFont = useCallback((objectsData) => {
+    if (!objectsData) return Promise.resolve()
+    // 拿到需要加载字体包的字体
+    const textList = filterToText(objectsData)
+    let style = ''
+    textList.forEach(item => {
+      useFontListLast.current.forEach(r => {
+        if (item.fontFamily === r.value && !Font.has(r.value)) {
+          style += `@font-face {font-family: ${r.value};src: url('${r.url}');}`
+        }
+      })
+    })
+    if (style === '') return Promise.resolve()
+    // 组装一下font-face，放到body中
+    const el = document.createElement('style')
+    el.innerHTML = style
+    document.body.appendChild(el)
+    // 加载多个字体
+    const fontFamiliesAll = textList.map((item) => {
+      return new Promise((resolve, reject) => {
+        const font = new FontFaceObserver(item.fontFamily);
+        font.load(item.fontFamily, 2000000).then(() => {
+          Font.set(item.fontFamily, true)
+          resolve()
+        }).catch(err => {
+          reject()
+          console.log('loadFont', err)
+        })
+      })
+    });
+    return Promise.all(fontFamiliesAll);
+  }, [fontList, fontLoaded])
 
-  }
+
   return {
     fontList,
     runChange,
-    loadFont
+    loadFont,
+    fontLoaded
   }
 }
 
