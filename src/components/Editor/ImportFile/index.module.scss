@@ -1,0 +1,49 @@
+.importFile {
+  display: flex;
+  align-items: center;
+
+  > span {
+    padding: 6px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+
+    img:nth-child(2) {
+      display: none;
+    }
+
+    span {
+      font-style: normal;
+      margin-left: 8px;
+      font-size: 16px;
+    }
+
+    &:hover {
+      background: #2C375E;
+
+      img:nth-child(1) {
+        display: none;
+      }
+
+      img:nth-child(2) {
+        display: inline;
+      }
+
+      span {
+        color: #ffffff;
+      }
+    }
+
+    span {
+      margin-left: 8px;
+      color: #ADADB3;
+      font-size: 16px;
+    }
+  }
+
+  .openFile {
+    margin-left: 20px;
+  }
+}
+

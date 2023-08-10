@@ -1,0 +1,42 @@
+.inputNumber {
+  background: #232634;
+  border-radius: 4px;
+  height: 28px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+
+  input {
+    width: 36px;
+    height: 20px;
+    background: none;
+    outline: none;
+    border: none;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: var(--input-font-size);
+  }
+
+  .control {
+    display: flex;
+    flex-direction: column;
+    span {
+      cursor: pointer;
+      display: flex;
+      img:nth-child(2) {
+        display: none;
+      }
+
+      &:hover {
+        img:nth-child(1) {
+          display: none;
+        }
+
+        img:nth-child(2) {
+          display: inline;
+        }
+      }
+    }
+  }
+}

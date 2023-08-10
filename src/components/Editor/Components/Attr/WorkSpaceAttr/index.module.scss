@@ -1,0 +1,49 @@
+.workSpaceAttr {
+  padding: 0 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+.base {
+  > div {
+    margin-bottom: 10px;
+  }
+}
+.division {
+  height: 1px;
+  background: #2B2F3E;
+  margin: 2px 0 12px 0;
+}
+.title {
+  color: #6A6A76;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.colorPicker {
+  background: #1C1D29 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border-radius: 4px;
+  overflow: hidden;
+  :global {
+    .flexbox-fix {
+      border-top: none !important;
+    }
+    label {
+      color: #6A6A76 !important;
+      padding-top: 10px !important;
+      font-size: 12px !important;
+      font-weight: bold !important;
+    }
+    input {
+      outline: none !important;
+      background: #232634 !important;
+      border-radius: 2px !important;
+      color: #FFFFFF !important;
+      font-size: 12px !important;
+      font-weight: bold !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+}

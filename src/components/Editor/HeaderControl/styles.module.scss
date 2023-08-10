@@ -1,0 +1,67 @@
+.headerControl {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  user-select: none;
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
+
+}
+
+.button {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0 2px;
+
+  img:nth-child(2) {
+    display: none;
+  }
+
+  &:hover, &.active {
+    background: #2C375E;
+
+    img:nth-child(1) {
+      display: none;
+    }
+
+    img:nth-child(2) {
+      display: inline;
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+}
+
+.ratioText {
+  margin-left: 8px;
+  color: #ADADB3;
+  font-size: 14px;
+  min-width: 40px;
+}
+
+.line {
+  width: 1px;
+  height: 16px;
+  background: #101224;
+  display: inline-block;
+  margin: 0 8px;
+}
+
+.reactTooltip {
+  display: none;
+  background: red;
+  //display: none;
+  //z-index: 2000;
+}
