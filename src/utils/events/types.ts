@@ -8,4 +8,8 @@ export const Types = {
    * TODO 如果新增了增删改的操作记得调用这个方法
    */
   CANVAS_CHANGE: 'canvasChange',
+  /**
+   * 剪裁图片
+   */
+  CLIP_IMAGE: 'clipImage'
 }

@@ -10,6 +10,7 @@
   width: var(--dm-change-resource-content-width);
   background: var(--dm-editor-theme-color);
   position: relative;
+  transition: width 0.3s;
 }
 
 .resourceNavItem {

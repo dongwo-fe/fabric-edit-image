@@ -27,6 +27,8 @@ interface CanvasContext {
   setShow: (value: boolean) => void
   mainUrl: string | undefined
   setMainUrl: (value: string | undefined) => void
+  isClipImage: boolean
+  setIsClipImage: (value: boolean) => void
 }
 
 export const Context = createContext<CanvasContext>({
@@ -40,6 +42,8 @@ export const Context = createContext<CanvasContext>({
   selectActive: [],
   show: false,
   mainUrl: '',
+  isClipImage: false,
+  setIsClipImage: noop,
   setMainUrl: noop,
   setSelectOneType: noop,
   setSelectActive: noop,
@@ -62,7 +66,8 @@ export const CanvasProvider: FC = ({children}) => {
   const [selectOneType, setSelectOneType] = useState('')
   const [selectActive, setSelectActive] = useState([])
   const [show, setShow] = useState(false)
-  const [mainUrl,setMainUrl] = useState('')
+  const [mainUrl, setMainUrl] = useState('')
+  const [isClipImage, setIsClipImage] = useState(false)
   const context = {
     canvas,
     editor,
@@ -83,7 +88,9 @@ export const CanvasProvider: FC = ({children}) => {
     show,
     setShow,
     mainUrl,
-    setMainUrl
+    setMainUrl,
+    isClipImage,
+    setIsClipImage
   }
 
   // @ts-ignore

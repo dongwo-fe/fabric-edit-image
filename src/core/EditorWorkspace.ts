@@ -4,6 +4,7 @@ import { throttle, uuid } from '../utils/utils';
 import { events, Types } from '../utils/events';
 import { isNumber } from '../utils';
 import { canvas } from 'file-saver';
+import { divide, subtract } from '../utils/calculate';
 
 const DefaultWidth = 1024
 const DefaultHeight = 1024
@@ -101,7 +102,7 @@ class EditorWorkspace {
       height: this.height,
       id: 'workspace',
     });
-
+    workspace.w = this
     workspace.set('selectable', false);
     workspace.set('hasControls', false);
     workspace.hoverCursor = 'default';
@@ -188,9 +189,9 @@ class EditorWorkspace {
     if (!width || !height) return 0
     // 按照宽度
     if (viewPortWidth / viewPortHeight < width / height) {
-      return viewPortWidth / width - 0.08;
+      return subtract(divide(viewPortWidth, width), 0.08)
     } // 按照宽度缩放
-    return viewPortHeight / height - 0.08;
+    return subtract(divide(viewPortHeight, height), 0.08)
   }
 
   // 放大

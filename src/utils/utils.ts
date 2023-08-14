@@ -25,13 +25,6 @@ export function retainNumber(value: string | number): string {
   return Number(result) + ''
 }
 
-export function colorRGBtoHex(color: string) {
-  const rgb = color.split(',');
-  const r = parseInt(rgb[0]);
-  const g = parseInt(rgb[1]);
-  const b = parseInt(rgb[2]);
-  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-}
 
 export function arrayMoveMutable(array: Array<any>, fromIndex: number, toIndex: number) {
   const startIndex = fromIndex < 0 ? array.length + fromIndex : fromIndex;

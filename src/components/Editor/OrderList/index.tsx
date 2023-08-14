@@ -38,6 +38,7 @@ const SortableItem = sortableElement((props: { item }) => {
     item.object.set({visible: !isVisible})
     canvas?.renderAll()
   }
+  const fontFamily = item.object.get('fontFamily')
   return <div
     onClick={clickItem}
     className={`${style.orderListItem} ${selectIds.includes(item.id) ? style.active : ''}`}
@@ -67,7 +68,12 @@ const SortableItem = sortableElement((props: { item }) => {
           <div className={style.image}>
             <img src={item.src} alt=""/>
           </div> :
-          <div className={style.text}>{item.text}</div>
+          <div
+            className={style.text}
+            style={{fontFamily: fontFamily || 'serif'}}
+          >
+            {item.text}
+          </div>
       }
     </div>
     <DragHandle/>
@@ -125,8 +131,8 @@ const OrderList = () => {
     const objects = canvas?.getObjects() || []
     const list = [
       ...objects.filter((item) => {
-        // 过滤掉辅助线和背景
-        return !(item instanceof fabric.GuideLine || item.id === 'workspace');
+        // 过滤掉辅助线和背景和裁剪rect
+        return !(item instanceof fabric.GuideLine || item.id === 'workspace' || item.id === 'currentClipRect');
       })
     ]
       .reverse()

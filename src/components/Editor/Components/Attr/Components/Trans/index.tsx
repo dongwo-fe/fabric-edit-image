@@ -5,6 +5,7 @@ import style from './index.module.scss'
 import useAttr from '../../../../../Draw/hooks/useAttr'
 import { Context } from '../../../../../Draw'
 import { retainNumber } from '../../../../../../utils/utils';
+import { divide, multiply } from '../../../../../../utils/calculate';
 
 const Transparent = () => {
   const {canvas} = useContext(Context)
@@ -14,8 +15,7 @@ const Transparent = () => {
   useEffect(() => {
     const activeObject = getActiveObject()
     if (!activeObject) return
-    setOpacity(parseInt((activeObject.opacity || 0) * 100))
-    setOpacity((activeObject.opacity * 100).toFixed(0))
+    setOpacity(multiply(activeObject.opacity, 100))
     setVisible(activeObject.visible || false)
   }, [getActiveObject])
   /**
@@ -27,7 +27,7 @@ const Transparent = () => {
       value = 100
     }
     value = retainNumber(value)
-    setAttr({opacity: (value / 100).toFixed(2)})
+    setAttr({opacity: divide(value, 100)})
     setOpacity(+value)
   }
   /**

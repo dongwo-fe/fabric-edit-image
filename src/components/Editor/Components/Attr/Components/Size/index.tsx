@@ -6,6 +6,7 @@ import { retainNumber } from '../../../../../../utils/utils'
 import { fabric } from 'fabric';
 import { Context } from '../../../../../Draw'
 import useLock, { isControlsInRatioVisible } from '../../../../../Draw/hooks/useLock'
+import { floatRound } from '../../../../../../utils/calculate';
 
 
 interface SizeProps {
@@ -36,8 +37,8 @@ const Size: React.FC<SizeProps> = ({getActiveObject, showRation, isWorkSpace}) =
   const getAttr = () => {
     const activeObject = getActiveObject()
     if (!activeObject) return
-    setWidth(parseInt(activeObject.width))
-    setHeight(parseInt(activeObject.height))
+    setWidth(floatRound(activeObject.width))
+    setHeight(floatRound(activeObject.height))
     setLockRatio(isControlsInRatioVisible(activeObject))
   }
   /**

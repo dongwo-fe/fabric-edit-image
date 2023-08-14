@@ -65,3 +65,43 @@
   //display: none;
   //z-index: 2000;
 }
+
+.clipSaveButton {
+  width: 84px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  border-radius: 4px;
+  align-items: center;
+  cursor: pointer;
+
+  img:nth-child(2) {
+    display: none;
+  }
+
+  span {
+    margin-left: 8px;
+    color: #ADADB3;
+    font-size: 16px;
+  }
+
+  &:nth-child(1) {
+    margin-right: 10px;
+  }
+
+  &:hover {
+    background: #2C375E;
+
+    span {
+      color: #ffffff;
+    }
+
+    img:nth-child(1) {
+      display: none;
+    }
+
+    img:nth-child(2) {
+      display: inline;
+    }
+  }
+}

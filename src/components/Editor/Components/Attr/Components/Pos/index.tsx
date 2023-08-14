@@ -4,6 +4,7 @@ import Input from '../../../../Input'
 import useAttr from '../../../../../Draw/hooks/useAttr';
 import { Context } from '../../../../../Draw';
 import { retainNumber } from '../../../../../../utils/utils';
+import { floatRound } from '../../../../../../utils/calculate';
 
 const Position = () => {
   const {canvas} = useContext(Context)
@@ -26,9 +27,9 @@ const Position = () => {
   const getAttr = () => {
     const activeObject = getActiveObject()
     if (!activeObject) return
-    setX(parseInt(String(activeObject.left || 0)))
-    setY(parseInt(String(activeObject.top || 0)))
-    setRotate(parseInt(String(activeObject.angle || 0)))
+    setX(floatRound(activeObject.left || 0))
+    setY(floatRound(activeObject.top || 0))
+    setRotate(floatRound(activeObject.angle || 0))
   }
   /**
    * 修改旋转角度

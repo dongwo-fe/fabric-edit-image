@@ -8,8 +8,8 @@ function initHotkeys(canvas: fabric.Canvas) {
     const activeObject = canvas.getActiveObjects();
     if (activeObject) {
       activeObject.map((item) => canvas.remove(item));
-      canvas.renderAll();
       canvas.discardActiveObject();
+      canvas.renderAll();
     }
   }
   // 删除快捷键

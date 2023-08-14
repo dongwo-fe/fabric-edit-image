@@ -1,15 +1,12 @@
 // @ts-nocheck
-import { useCallback, useContext, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { Context } from '../CanvasContext';
 import { fabric } from 'fabric';
-// import { events, Types } from '../../../utils/events';
-import { setLocal } from '../../../utils/local';
-import { LocalKeys } from '../../../utils/local/keys';
 
 const useEvents = () => {
-  const {canvas, editor, workSpace, setSelectMode, setSelectIds, setSelectOneType} = useContext(Context)
+  const {canvas, editor, workSpace, setSelectMode, setSelectIds, setSelectOneType, setIsClipImage} = useContext(Context)
   /**
-   * 暴露单选多选事件
+   * 单选多选事件
    */
   const selected = useCallback(() => {
     if (!canvas) return
@@ -30,18 +27,10 @@ const useEvents = () => {
       setSelectOneType('')
     }
   }, [canvas, editor])
-  /**
-   * 将数据存在浏览器中，记录用户操作
-   */
-  const saveJsonToLocal = useCallback(() => {
-    console.log('saveJsonToLocal')
-    if (!canvas) return
-    const json = editor?.getJson()
-    if (!json) return
-    // 将数据存储在localStorage中
-    setLocal(LocalKeys.CANVAS_DATA, JSON.stringify(json))
-  }, [canvas, editor])
 
+  /**
+   * 鼠标缩放事件
+   */
   const onWheel = useCallback(({e}) => {
     const delta = e.deltaY;
     // 根据滚轮方向调整缩放级别
@@ -55,25 +44,12 @@ const useEvents = () => {
     e.stopPropagation();
   }, [canvas, workSpace])
 
+  const onClipImage = useCallback((value) => {
+    setIsClipImage(value)
+  }, [])
+
   useEffect(() => {
     if (!canvas) return
-    canvas.on({
-      'selection:created': selected,
-      'selection:updated': selected,
-      'selection:cleared': selected,
-      'object:modified': saveJsonToLocal,
-    })
-    // events.on(Types.CANVAS_CHANGE, saveJsonToLocal)
-    return () => {
-      canvas.off({
-        'selection:created': selected,
-        'selection:updated': selected,
-        'selection:cleared': selected,
-        'canvas:modified': saveJsonToLocal,
-      })
-      // events.off(Types.CANVAS_CHANGE, saveJsonToLocal)
-    }
-  }, [canvas, editor])
     canvas.on({
       'selection:created': selected,
       'selection:updated': selected,
@@ -88,7 +64,7 @@ const useEvents = () => {
         'mouse:wheel': onWheel
       })
     }
-  }, [canvas])
+  }, [canvas, editor])
 }
 
 export default useEvents
