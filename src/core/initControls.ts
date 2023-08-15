@@ -200,11 +200,20 @@ function initMainControl() {
   function cloneObject(eventData, transform) {
     const target = transform.target;
     const canvas = target.canvas;
-
     target.clone(function (cloned) {
-      cloned.left += 20;
-      cloned.top += 20;
-      canvas.add(cloned);
+      cloned.set({
+        left: target.left + 20,
+        top: target.top + 20,
+        sourceSrc: target.sourceSrc,
+        rawScaleX: target.rawScaleX,
+        rawScaleY: target.rawScaleY,
+        sourceImageDiffTop: target.sourceImageDiffTop,
+        sourceImageDiffLeft: target.sourceImageDiffLeft
+      })
+      cloned.left += 20
+      cloned.top += 20
+      cloned.setCoords()
+      canvas.add(cloned)
       canvas.setActiveObject(cloned)
       canvas.renderAll()
     });
@@ -224,18 +233,22 @@ function initMainControl() {
   function clipObject(eventData, transform) {
     const image = transform.target;
     const canvas = image.canvas;
-    const sourceSrc = image.get('sourceSrc')
-    const scale = image.get('rawScale') || image.scaleX
+    const sourceSrc = image.sourceSrc
+    const rawScaleX = image.rawScaleX || image.scaleX
+    const rawScaleY = image.rawScaleY || image.scaleY
     const index = canvas.getObjects().findIndex(item => item.id === image.id);
     const sourceWidth = image.getScaledWidth()
     const sourceHeight = image.getScaledHeight()
+    image.clone((o) => {
+      image.set({cloneObject: o})
+    })
     if (sourceSrc) {
       image.setSrc(sourceSrc, () => {
         canvas.renderAll()
       }, {crossOrigin: 'anonymous'})
       image.set({
-        scaleX: scale,
-        scaleY: scale,
+        scaleX: rawScaleX,
+        scaleY: rawScaleY,
         left: image.left - image.sourceImageDiffLeft,
         top: image.top - image.sourceImageDiffTop,
       })
@@ -249,10 +262,6 @@ function initMainControl() {
       topBg: false
     })
     // 存一下原图的src，因为后面裁剪后生成的图片就是base64了
-    image.set({
-      centeredScaling: true,
-      rawScale: scale
-    })
     // 创建一个矩形，让他在图片的上面
     const selectionRect = new fabric.Rect({
       left: !isUndef(image.sourceImageDiffLeft) ? image.sourceImageDiffLeft + image.left : image.left,
@@ -264,10 +273,6 @@ function initMainControl() {
       opacity: 1,
       width: sourceWidth,
       height: sourceHeight,
-      // width: !isUndef(image.sourceImageDiffLeft) ? sourceWidth / (image.scaleX * 100) * 100 : sourceWidth,
-      // height: !isUndef(image.sourceImageDiffTop) ? sourceHeight / (image.scaleY * 100) * 100 : sourceHeight,
-      // scaleX: scale,
-      // scaleY: scale,
       hasRotatingPoint: false,
       transparentCorners: false,
       cornerColor: "white",
@@ -281,6 +286,12 @@ function initMainControl() {
       id: 'currentClipRect',
       centeredScaling: true
     });
+    image.set({
+      centeredScaling: true,
+      sourceSrc: image.sourceSrc || image._element.src,
+      rectRawX: selectionRect.left,
+      rectRawY: selectionRect.top
+    })
     // 控制rect的拖动区域
     selectionRect.on('moving', (e) => {
       const rect = e.transform.target
@@ -305,35 +316,34 @@ function initMainControl() {
       canvas.renderAll()
     })
     // 监听rect八个角缩放的事件
-    // selectionRect.on('scaling', (e) => {
-    //   const rect = e.transform.target
-    //   if (rect.left < image.left) {
-    //     rect.set({left: image.left})
-    //   }
-    //   if (rect.top < image.top) {
-    //     rect.set({top: image.top})
-    //   }
-    //   if (rect.left + rect.getScaledWidth() > image.left + image.getScaledWidth()) {
-    //     rect.set({left: image.left + image.getScaledWidth() - rect.getScaledWidth()})
-    //   }
-    //   if (rect.top + rect.getScaledHeight() > image.top + image.getScaledHeight()) {
-    //     rect.set({top: image.top + image.getScaledHeight() - rect.getScaledHeight()})
-    //   }
-    //   if (rect.get('scaleX') > image.get('scaleX')) {
-    //     rect.set({
-    //       scaleX: image.get('scaleX'),
-    //       left: image.left,
-    //     })
-    //   }
-    //
-    //   if (rect.get('scaleY') > image.get('scaleY')) {
-    //     rect.set({
-    //       scaleY: image.get('scaleY'),
-    //       top: image.top
-    //     })
-    //   }
-    //   canvas.renderAll()
-    // });
+    selectionRect.on('scaling', (e) => {
+      const rect = e.transform.target
+      if (rect.left < image.left) {
+        rect.set({left: image.left})
+      }
+      if (rect.top < image.top) {
+        rect.set({top: image.top})
+      }
+      if (rect.left + rect.getScaledWidth() > image.left + image.getScaledWidth()) {
+        rect.set({left: image.left + image.getScaledWidth() - rect.getScaledWidth()})
+      }
+      if (rect.top + rect.getScaledHeight() > image.top + image.getScaledHeight()) {
+        rect.set({top: image.top + image.getScaledHeight() - rect.getScaledHeight()})
+      }
+      if (image.getScaledWidth() / rect.getScaledWidth() < 1) {
+        rect.set({
+          scaleX: image.getScaledWidth() / selectionRect.getScaledWidth() * rect.get('scaleX'),
+          left: image.left,
+        })
+      }
+      if (image.getScaledHeight() / rect.getScaledHeight() < 1) {
+        rect.set({
+          scaleY: image.getScaledHeight() / selectionRect.getScaledHeight() * rect.get('scaleY'),
+          top: image.top
+        })
+      }
+      canvas.renderAll()
+    });
     // 控制图片的拖动区域
     image.on('moving', (e) => {
       const image = e.transform.target
@@ -354,29 +364,22 @@ function initMainControl() {
       canvas.renderAll()
     })
     // 监听图片八个角缩放事件
-    // image.on('scaling', (e) => {
-    //   const image = e.transform.target
-    //   if (image.left > selectionRect.left) {
-    //     image.set({left: selectionRect.left})
-    //   }
-    //   if (image.top > selectionRect.top) {
-    //     image.set({top: selectionRect.top})
-    //   }
-    //   if (image.get('scaleX') < selectionRect.get('scaleX')) {
-    //     image.set({
-    //       scaleX: selectionRect.get('scaleX'),
-    //       left: selectionRect.left,
-    //     })
-    //   }
-    //
-    //   if (image.get('scaleY') < selectionRect.get('scaleY')) {
-    //     image.set({
-    //       scaleY: selectionRect.get('scaleY'),
-    //       top: selectionRect.top
-    //     })
-    //   }
-    //   canvas.renderAll()
-    // });
+    image.on('scaling', (e) => {
+      const image = e.transform.target
+      if (image.left > selectionRect.left) {
+        image.set({left: selectionRect.left})
+      }
+      if (image.top > selectionRect.top) {
+        image.set({top: selectionRect.top})
+      }
+      if (selectionRect.getScaledWidth() / image.getScaledWidth() > 1) {
+        image.set({scaleX: selectionRect.getScaledWidth() * image.get('scaleX') / image.getScaledWidth()})
+      }
+      if (selectionRect.getScaledHeight() / image.getScaledHeight() > 1) {
+        image.set({scaleY: selectionRect.getScaledHeight() * image.get('scaleY') / image.getScaledHeight()})
+      }
+      canvas.renderAll()
+    });
     // 矩形不要操作按钮，将它们隐藏
     selectionRect.setControlsVisibility({
       copy: false,

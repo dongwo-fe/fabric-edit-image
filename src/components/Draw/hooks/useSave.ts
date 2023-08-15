@@ -3,11 +3,13 @@ import { Context } from '../CanvasContext';
 import { saveAs } from 'file-saver';
 import { uuid } from '../../../utils/utils';
 import { saveHistory as saveHistoryApi } from '../../../api/image';
+import useClipImage from './useClipImage';
 
 const useSave = () => {
   const userInfo = localStorage.getItem('userInfo')
-  const phone = userInfo ? JSON.parse(userInfo).phone : '15612868761';
-  const {editor, canvas, workSpace, mainUrl} = useContext(Context)
+  const phone = userInfo ? JSON.parse(userInfo).phone : '15612868761'
+  const {editor, canvas, workSpace, mainUrl, isClipImage} = useContext(Context)
+  const {cancelClipImage} = useClipImage()
   const [saveToImageLoading, setSaveToImageLoading] = useState(false)
   const useLast = useRef<any>({})
   useLast.current = {
@@ -62,6 +64,10 @@ const useSave = () => {
   const saveToImage = useCallback(async () => {
     if (saveToImageLoading) return
     if (!canvas || !editor) return;
+    // 如果正在编辑图片
+    if (isClipImage) {
+      cancelClipImage()
+    }
     try {
       setSaveToImageLoading(true)
       await saveHistory()
@@ -77,11 +83,11 @@ const useSave = () => {
         width,
         height,
       };
-
+      const scale = canvas.getZoom()
       canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
       const dataUrl = canvas.toDataURL(option);
       saveAs(dataUrl, `${uuid()}.png`);
-      workSpace?.auto()
+      workSpace?.setZoomAuto(scale)
       // 恢复之前的缩放比例
       editor.ruler.showGuideline();
       setSaveToImageLoading(false)
@@ -90,7 +96,7 @@ const useSave = () => {
       workSpace?.auto()
       setSaveToImageLoading(false)
     }
-  }, [canvas, editor, workSpace])
+  }, [canvas, editor, workSpace, isClipImage])
 
   return {
     saveToJson,

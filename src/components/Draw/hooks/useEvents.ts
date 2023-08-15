@@ -2,9 +2,35 @@
 import { useCallback, useContext, useEffect } from 'react';
 import { Context } from '../CanvasContext';
 import { fabric } from 'fabric';
+import { KeyNames } from '../../../utils/hotEventKeys';
+import { hotkeys } from '../../../core/initHotKeys'
 
 const useEvents = () => {
-  const {canvas, editor, workSpace, setSelectMode, setSelectIds, setSelectOneType, setIsClipImage} = useContext(Context)
+  const {canvas, editor, workSpace, setSelectMode, setSelectIds, setSelectOneType, isClipImage} = useContext(Context)
+  useEffect(() => {
+    if (!canvas) return
+    canvas.on({
+      'selection:created': selected,
+      'selection:updated': selected,
+      'selection:cleared': selected,
+      'mouse:wheel': onWheel
+    })
+    return () => {
+      canvas.off({
+        'selection:created': selected,
+        'selection:updated': selected,
+        'selection:cleared': selected,
+        'mouse:wheel': onWheel
+      })
+    }
+  }, [canvas, editor])
+  useEffect(() => {
+    hotkeys(KeyNames.delete, deleteObjects);
+    return () => {
+      hotkeys.unbind(KeyNames.delete, deleteObjects);
+    }
+  }, [canvas, isClipImage])
+
   /**
    * 单选多选事件
    */
@@ -43,28 +69,19 @@ const useEvents = () => {
     e.preventDefault();
     e.stopPropagation();
   }, [canvas, workSpace])
-
-  const onClipImage = useCallback((value) => {
-    setIsClipImage(value)
-  }, [])
-
-  useEffect(() => {
-    if (!canvas) return
-    canvas.on({
-      'selection:created': selected,
-      'selection:updated': selected,
-      'selection:cleared': selected,
-      'mouse:wheel': onWheel
-    })
-    return () => {
-      canvas.off({
-        'selection:created': selected,
-        'selection:updated': selected,
-        'selection:cleared': selected,
-        'mouse:wheel': onWheel
-      })
+  /**
+   * 删除
+   */
+  const deleteObjects = useCallback(() => {
+    // 如果正在剪裁图片不让删除
+    if (isClipImage) return
+    const activeObject = canvas.getActiveObjects();
+    if (activeObject) {
+      activeObject.map((item) => canvas.remove(item));
+      canvas.discardActiveObject();
+      canvas.renderAll();
     }
-  }, [canvas, editor])
+  }, [canvas, isClipImage])
 }
 
 export default useEvents

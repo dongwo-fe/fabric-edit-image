@@ -4,16 +4,6 @@ import { KeyNames } from '../utils/hotEventKeys';
 
 
 function initHotkeys(canvas: fabric.Canvas) {
-  const deleteObjects = () => {
-    const activeObject = canvas.getActiveObjects();
-    if (activeObject) {
-      activeObject.map((item) => canvas.remove(item));
-      canvas.discardActiveObject();
-      canvas.renderAll();
-    }
-  }
-  // 删除快捷键
-  hotkeys(KeyNames.delete, deleteObjects);
 
   // 移动快捷键
   hotkeys(KeyNames.lrdu, (_event, handler) => {
