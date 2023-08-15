@@ -5,11 +5,12 @@ import { saveAs } from 'file-saver'
 import styles from './index.module.scss'
 import { uuid } from '../../../utils/utils'
 import { saveHistory } from '../../../api/image'
+import { trackSensors, SensorKeys } from '../../../utils/sensors'
 
-const SaveButton = ({src}: { src: string | undefined }) => {
+const SaveButton = ({ src }: { src: string | undefined }) => {
   const userInfo = localStorage.getItem('userInfo')
-  const phone = userInfo ? JSON.parse(userInfo).phone : '15612868761';
-  const {editor, canvas, workSpace, show} = useContext(Context)
+  const phone = userInfo ? JSON.parse(userInfo).phone : '15612868761'
+  const { editor, canvas, workSpace, show } = useContext(Context)
   // const [show, setShow] = useState(false)
   // useEffect(() => {
   //   const onClick = () => {
@@ -27,13 +28,17 @@ const SaveButton = ({src}: { src: string | undefined }) => {
     e.stopPropagation()
     if (!editor || !show) return
     // setShow(prevState => !prevState)
-    const dataJson = editor.getJson();
+    const dataJson = editor.getJson()
     saveHistory({
       phone,
       data: dataJson ? JSON.stringify(dataJson) : {},
       imgSrc: src
     })
     onSaveToImage()
+    trackSensors(SensorKeys.saveEditImageClick, {
+      imgSrc: src,
+      userPhone: phone
+    })
   }
   /**
    * 保存为json
@@ -50,28 +55,30 @@ const SaveButton = ({src}: { src: string | undefined }) => {
    * 保存为图片
    */
   const onSaveToImage = () => {
-    if (!canvas || !editor) return;
+    if (!canvas || !editor) return
     try {
-      const workspace = canvas?.getObjects().find((item) => item.id === 'workspace');
-      editor.ruler.hideGuideline();
-      if (!workspace) return;
-      const {left, top, width, height} = workspace;
+      const workspace = canvas
+        ?.getObjects()
+        .find((item) => item.id === 'workspace')
+      editor.ruler.hideGuideline()
+      if (!workspace) return
+      const { left, top, width, height } = workspace
       const option = {
         format: 'png',
         quality: 1,
         left,
         top,
         width,
-        height,
-      };
+        height
+      }
 
-      canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
-      const dataUrl = canvas.toDataURL(option);
-      saveAs(dataUrl, `${uuid()}.png`);
+      canvas.setViewportTransform([1, 0, 0, 1, 0, 0])
+      const dataUrl = canvas.toDataURL(option)
+      saveAs(dataUrl, `${uuid()}.png`)
       workSpace?.auto()
       // 恢复之前的缩放比例
-      editor.ruler.showGuideline();
-    }catch (err) {
+      editor.ruler.showGuideline()
+    } catch (err) {
       console.log('onSaveToImage', err)
       workSpace?.auto()
     }
@@ -85,10 +92,9 @@ const SaveButton = ({src}: { src: string | undefined }) => {
       {/*  <span>预览</span>*/}
       {/*</span>*/}
       <span className={styles.saveWrap}>
-        <span
-          onClick={onSave}
-          className={styles.saveButton}
-        >下&nbsp;载</span>
+        <span onClick={onSave} className={styles.saveButton}>
+          下&nbsp;载
+        </span>
         {/*<span className={`${styles.fixButton} ${show ? styles.showButton : ''}`}>*/}
         {/*<span onClick={onSaveToJson}>保存</span>*/}
         {/*<span onClick={onSaveToImage}>保存为图片</span>*/}
