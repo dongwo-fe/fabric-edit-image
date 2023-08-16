@@ -4,6 +4,7 @@ import { Context } from '../CanvasContext';
 import { Context as EditorContext } from '../../Editor/Context'
 import { fabric } from 'fabric';
 import { uuid } from '../../../utils/utils';
+import useClipImage from './useClipImage';
 
 // 默认参数
 const DefaultOptions = {
@@ -14,15 +15,17 @@ const DefaultOptions = {
 }
 
 const useAddObject = () => {
-  const {workSpace, canvas} = useContext(Context)
+  const {workSpace, canvas, isClipImage, clipImageId, clipRawIndex} = useContext(Context)
+  const {cancelClipImage} = useClipImage()
   const {setLoading} = useContext(EditorContext)
   /**
    * 新增图片
    * @param item
    */
-  const addImage = useCallback((src, options) => {
+  const addImage = useCallback((src, options,callback) => {
     if (!workSpace) return
     setLoading(true)
+    if (isClipImage) cancelClipImage()
     const scale = workSpace.getScale()
     fabric.Image.fromURL(`${src}?t=${Date.now()}`, img => {
       if (!img.width || !img.height) {
@@ -36,21 +39,23 @@ const useAddObject = () => {
         scaleX: scale,
         left: (workSpace.width - img.width * scale) / 2,
         top: (workSpace.height - img.height * scale) / 2,
-        ...options
+        ...options,
       })
       canvas?.add(img)
       canvas?.setActiveObject(img);
+      callback?.(img)
       canvas?.renderAll();
       setLoading(false)
     }, {crossOrigin: 'anonymous'})
-  }, [workSpace, canvas])
+  }, [workSpace, canvas, clipImageId, clipRawIndex])
 
   /**
    * 新增文字
    */
   const addText = useCallback((item) => {
     if (!workSpace) return
-    const text = new fabric.Textbox(item.title, {
+    if (isClipImage) cancelClipImage()
+    const text = new fabric.IText(item.title, {
       ...DefaultOptions.text,
       fontFamily: 'serif',
       fontSize: item.style.fontSize as number * 3,
@@ -64,7 +69,7 @@ const useAddObject = () => {
     canvas?.add(text)
     canvas?.setActiveObject(text)
     canvas?.renderAll();
-  }, [workSpace, canvas])
+  }, [workSpace, canvas, clipImageId, clipRawIndex])
   return {
     addImage,
     addText,

@@ -6,9 +6,11 @@ import useAddObject from '../../../../Draw/hooks/useAddObject';
 import { addImageApi, getImageList, postUploadImage } from '../../../../../api/image';
 import { Context } from '../../../../Draw';
 import { Context as EditorContext } from '../../../Context'
+import useToast from '../../../../Draw/hooks/useToast';
 
 const ImageResource = () => {
   const {setLoading} = useContext(EditorContext)
+  const toast = useToast()
   const {canvas} = useContext(Context)
   const EDIT_IMAGE_LIST = sessionStorage.getItem('EDIT_IMAGE_LIST')
   const userInfo = localStorage.getItem('userInfo')
@@ -27,23 +29,37 @@ const ImageResource = () => {
     queryList()
   }, [])
 
-  // useEffect(() => {
-  //   if (!canvas) return
-  //   canvas.on('drop', onDrop)
-  //   canvas.on('dragover', onDragover)
-  //   return () => {
-  //     canvas.off('drop', onDrop)
-  //     canvas.off('dragover', onDragover)
-  //   }
-  // }, [canvas])
+  useEffect(() => {
+    if (!canvas) return
+    canvas.on('drop', onDrop)
+    canvas.on('dragover', onDragover)
+    return () => {
+      canvas.off('drop', onDrop)
+      canvas.off('dragover', onDragover)
+    }
+  }, [canvas])
 
   // 添加画布的拖拽事件监听器
   const onDrop = ({e}) => {
     e.preventDefault()
     const imageUrl = e.dataTransfer.getData('text/plain');
-    addImage(imageUrl, {
-      left: e.layerX,
-      top: e.layerY
+    // 画布元素距离浏览器左侧和顶部的距离
+    let offset = {
+      left: canvas.getSelectionElement().getBoundingClientRect().left,
+      top: canvas.getSelectionElement().getBoundingClientRect().top
+    }
+    // 鼠标坐标转换成画布的坐标（未经过缩放和平移的坐标）
+    let point = {
+      x: e.x - offset.left,
+      y: e.y - offset.top,
+    }
+    // 转换后的坐标，restorePointerVpt 不受视窗变换的影响
+    let pointerVpt = canvas.restorePointerVpt(point)
+    addImage(imageUrl, {}, img => {
+      img.set({
+        left: pointerVpt.x - img.getScaledWidth() / 2,
+        top: pointerVpt.y - img.getScaledHeight() / 2,
+      })
     })
   }
   // 阻止画布的默认拖拽行为
@@ -71,26 +87,28 @@ const ImageResource = () => {
    */
   const onUploadFile = async (e: any) => {
     if (uploading) return
-    setUploading(true)
-    const [file] = e.target.files
-    if (!/(png|jpg|jpeg)/g.test(file.type)) return console.log('type error')
+    const fileList = [...e.target.files]
     try {
+      setUploading(true)
       setLoading(true)
-      const res = await postUploadImage(file)
-      await addImageApi({
-        phone,
-        imgSrc: res.url,
-        stockName: file.name
-      })
-      await queryList()
-      setUploading(false)
-      setLoading(false)
-      e.target.value = ''
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i]
+        if (!/(png|jpg|jpeg)/g.test(file.type)) continue
+        const res = await postUploadImage(file)
+        await addImageApi({
+          phone,
+          imgSrc: res.url,
+          stockName: file.name
+        })
+      }
     } catch (err) {
-      e.target.value = ''
-      setUploading(false)
-      setLoading(false)
+      console.log(err)
+      toast.error(err.message)
     }
+    e.target.value = ''
+    await queryList()
+    setUploading(false)
+    setLoading(false)
   }
 
   const onDragStart = e => {
@@ -104,7 +122,7 @@ const ImageResource = () => {
       {/*</div>*/}
       <div className={styles.uploadFile}>
         <span>{uploading ? '上传中...' : '上传文件'}</span>
-        <input disabled={uploading} type="file" accept='.png,.jpg,.jpeg' onChange={onUploadFile}/>
+        <input multiple disabled={uploading} type="file" accept='.png,.jpg,.jpeg' onChange={onUploadFile}/>
       </div>
       {
         !list.length ? <div className={styles.empty}>
@@ -121,8 +139,7 @@ const ImageResource = () => {
                 className={styles.fileListItem}
               >
                 <img
-                  draggable={false}
-                  // onDragStart={onDragStart}
+                  onDragStart={onDragStart}
                   onError={e => {
                     e.target.style.cursor = 'not-allowed'
                     e.target.style.pointerEvents = 'none'
@@ -133,7 +150,6 @@ const ImageResource = () => {
                   src={item.imgSrc}
                   alt=""
                 />
-                {/*右键菜单来不及做了，先不做*/}
                 <img
                   onClick={(e) => onClickMore(e, item)}
                   className={styles.more}

@@ -7,13 +7,13 @@ import { KeyNames } from '../../../utils/hotEventKeys'
 import { hotkeys } from '../../../core/initHotKeys'
 import styles from './styles.module.scss'
 import { Tooltip } from 'react-tooltip'
-import { floatRound } from '../../../utils/calculate';
-import useClipImage from '../../Draw/hooks/useClipImage';
+import { floatRound } from '../../../utils/calculate'
+import useClipImage from '../../Draw/hooks/useClipImage'
 
 const HeaderControl = () => {
   const {
     workSpace, drawMode, setDrawMode, canvas, editor, isClipImage,
-    setIsClipImage, setClipImageId, setClipRawIndex
+    setIsClipImage, setClipImageId, setClipRawIndex,clipImageId, clipRawIndex
   } = useContext(Context)
   const {saveClipImage, cancelClipImage} = useClipImage()
   const [scale, setScale] = useState(0)
@@ -37,18 +37,21 @@ const HeaderControl = () => {
     }
   }, [canvas, workSpace])
   useEffect(() => {
-    hotkeys(KeyNames.ctrlz, undo)
-    hotkeys(KeyNames.ctrlshiftz, redo)
     hotkeys(KeyNames.enter, saveClipImage)
     hotkeys(KeyNames.esc, cancelClipImage)
     return () => {
-      hotkeys.unbind(KeyNames.ctrlz, undo)
-      hotkeys.unbind(KeyNames.ctrlshiftz, redo)
       hotkeys.unbind(KeyNames.enter, saveClipImage)
       hotkeys.unbind(KeyNames.esc, cancelClipImage)
     }
+  }, [canvas, workSpace,clipImageId, clipRawIndex])
+  useEffect(() => {
+    hotkeys(KeyNames.ctrlz, undo)
+    hotkeys(KeyNames.ctrlshiftz, redo)
+    return () => {
+      hotkeys.unbind(KeyNames.ctrlz, undo)
+      hotkeys.unbind(KeyNames.ctrlshiftz, redo)
+    }
   }, [])
-
   useEffect(() => {
     if (!canvas) return
     if (!historyFlagRef.current) return
@@ -58,13 +61,11 @@ const HeaderControl = () => {
       canvas.renderAll();
     });
   }, [value, canvas])
-
   useEffect(() => {
     if (workSpace?.scale) {
       setScale(floatRound(workSpace.scale * 100))
     }
   }, [workSpace?.scale])
-
   useEffect(() => {
     events.on(Types.CHANGE_SCALE, scale => {
       setScale(floatRound(scale * 100))
@@ -76,7 +77,6 @@ const HeaderControl = () => {
       window.removeEventListener('keyup', onKeyUp)
     }
   }, [workSpace, drawMode])
-
   useEffect(() => {
     if (!workSpace || !editor) return
     reset(editor.getJson());
@@ -220,7 +220,7 @@ const HeaderControl = () => {
           className={styles.button}
           onClick={() => workSpace?.big()}
           id='control-tooltip'
-          data-tooltip-content="放大视图"
+          data-tooltip-content="放大视图 Ctrl +"
           data-tooltip-place="bottom"
         >
           <img src="https://ossprod.jrdaimao.com/file/1690509650392929.svg" alt=""/>
@@ -231,7 +231,7 @@ const HeaderControl = () => {
           className={styles.button}
           onClick={() => workSpace?.small()}
           id='control-tooltip'
-          data-tooltip-content="缩小视图"
+          data-tooltip-content="缩小视图 Ctrl -"
           data-tooltip-place="bottom"
         >
           <img src="https://ossprod.jrdaimao.com/file/1690509673723181.svg" alt=""/>

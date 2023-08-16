@@ -35,12 +35,6 @@ const Draw: React.FC<{ src?: string }> = (props) => {
   }, [])
 
   const init = async () => {
-    // 本地有数据就先用本地，优先本地数据
-    // const canvasData = getLocal(LocalKeys.CANVAS_DATA)
-    // if (canvasData) {
-    //   return initCanvas(canvasData)
-    // }
-
     // 没有src不去请求，直接生成背景
     if (!props.src) {
       return initCanvas()

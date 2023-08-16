@@ -10,7 +10,7 @@ export type ResourceNavItem = {
 
 export const ResourceTypeEnum = {
   ALREADY_UPLOAD: 'alreadyUpload',
-  TEXT: 'text'
+  TEXT: 'i-text'
 }
 
 export const resourceNavList = [

@@ -7,9 +7,10 @@ interface ImportFileProps {
 }
 
 const ImportFile: React.FC<ImportFileProps> = (props) => {
-  const {saveHistory} = useSave()
+  const {saveHistory,unloadSendBeacon} = useSave()
   const back = () => {
     saveHistory()
+    unloadSendBeacon()
     props.onBack?.()
   }
   return (

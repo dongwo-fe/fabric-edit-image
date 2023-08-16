@@ -4,11 +4,13 @@ import { saveAs } from 'file-saver';
 import { uuid } from '../../../utils/utils';
 import { saveHistory as saveHistoryApi } from '../../../api/image';
 import useClipImage from './useClipImage';
+import useToast from './useToast';
 
 const useSave = () => {
   const userInfo = localStorage.getItem('userInfo')
+  const toast = useToast()
   const phone = userInfo ? JSON.parse(userInfo).phone : '15612868761'
-  const {editor, canvas, workSpace, mainUrl, isClipImage} = useContext(Context)
+  const {editor, canvas, workSpace, mainUrl, isClipImage, clipImageId, clipRawIndex} = useContext(Context)
   const {cancelClipImage} = useClipImage()
   const [saveToImageLoading, setSaveToImageLoading] = useState(false)
   const useLast = useRef<any>({})
@@ -24,6 +26,8 @@ const useSave = () => {
     const {editor, mainUrl, phone} = useLast.current
     if (!editor || !mainUrl || !phone) return
     const dataJson = editor.getJson()
+    // 把裁剪蒙层过滤出去
+    dataJson.objects = dataJson.objects.filter((item: any) => item.id !== 'currentClipRect')
     const data = JSON.stringify({
       phone,
       data: dataJson ? JSON.stringify(dataJson) : '',
@@ -94,9 +98,10 @@ const useSave = () => {
     } catch (err) {
       console.log('onSaveToImage err', err)
       workSpace?.auto()
+      toast.error(err.message)
       setSaveToImageLoading(false)
     }
-  }, [canvas, editor, workSpace, isClipImage])
+  }, [canvas, editor, workSpace, isClipImage, clipImageId, clipRawIndex])
 
   return {
     saveToJson,

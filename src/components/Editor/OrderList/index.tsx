@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc'
+import { sortableContainer, sortableElement } from 'react-sortable-hoc'
 import { arrayMoveImmutable } from '../../../utils/utils'
 import { fabric } from 'fabric'
 import style from './index.module.scss'
@@ -17,7 +17,8 @@ const SortableItem = sortableElement((props: { item }) => {
   /**
    * 设置高亮
    */
-  const clickItem = useCallback(() => {
+  const clickItem = useCallback((e) => {
+    e.stopPropagation()
     if (!canvas) return
     canvas.setActiveObject(item.object)
     canvas.renderAll()
@@ -80,11 +81,11 @@ const SortableItem = sortableElement((props: { item }) => {
   </div>
 })
 
-const DragHandle = sortableHandle(() => {
+const DragHandle = () => {
   return <div className={style.move}>
     <img src="https://ossprod.jrdaimao.com/file/1690437934587361.svg" alt=""/>
   </div>
-})
+}
 
 const SortableContainer = sortableContainer(({children}: { children }) => {
   return children
@@ -162,7 +163,7 @@ const OrderList = () => {
         </div> : null
       }
       {
-        list.length ? <SortableContainer onSortEnd={onSortEnd} useDragHandle>
+        list.length ? <SortableContainer distance={1} onSortEnd={onSortEnd}>
           <div className={style.orderList}>
             {
               list.map((item, index) => {

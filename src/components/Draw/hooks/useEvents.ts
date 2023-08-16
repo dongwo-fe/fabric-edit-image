@@ -4,9 +4,15 @@ import { Context } from '../CanvasContext';
 import { fabric } from 'fabric';
 import { KeyNames } from '../../../utils/hotEventKeys';
 import { hotkeys } from '../../../core/initHotKeys'
+import useClipImage from './useClipImage';
 
 const useEvents = () => {
-  const {canvas, editor, workSpace, setSelectMode, setSelectIds, setSelectOneType, isClipImage} = useContext(Context)
+  const {
+    canvas, editor, workSpace, setSelectMode, setSelectIds, setSelectOneType,
+    clipImageId, setIsClipImage, clipRawIndex,
+    isClipImage
+  } = useContext(Context)
+  const {cancelClipImage} = useClipImage()
   useEffect(() => {
     if (!canvas) return
     canvas.on({
@@ -29,8 +35,27 @@ const useEvents = () => {
     return () => {
       hotkeys.unbind(KeyNames.delete, deleteObjects);
     }
-  }, [canvas, isClipImage])
-
+  }, [canvas, isClipImage, clipImageId])
+  useEffect(() => {
+    hotkeys(KeyNames.zoom, onZoom)
+    return () => {
+      hotkeys.unbind(KeyNames.zoom, onZoom)
+    }
+  }, [canvas, workSpace])
+  // useEffect(() => {
+  //   if (!canvas) return
+  //   canvas.on('selection:updated', selectionUpdated)
+  //   return () => {
+  //     canvas.off('selection:updated', selectionUpdated)
+  //   }
+  // }, [canvas, isClipImage, clipImageId, clipRawIndex])
+  //
+  // const selectionUpdated = useCallback(() => {
+  //   const objects = canvas?.getActiveObjects()
+  //   if (isClipImage) {
+  //     cancelClipImage()
+  //   }
+  // }, [canvas, isClipImage, clipImageId, clipRawIndex])
   /**
    * 单选多选事件
    */
@@ -53,7 +78,19 @@ const useEvents = () => {
       setSelectOneType('')
     }
   }, [canvas, editor])
-
+  /**
+   * 放大缩小
+   */
+  const onZoom = useCallback((e) => {
+    if (e.code === 'Minus') {
+      workSpace?.small(0.05)
+    }
+    if (e.code === 'Equal') {
+      workSpace?.big(0.05)
+    }
+    e.preventDefault();
+    e.stopPropagation();
+  }, [canvas, workSpace])
   /**
    * 鼠标缩放事件
    */
@@ -69,19 +106,42 @@ const useEvents = () => {
     e.preventDefault();
     e.stopPropagation();
   }, [canvas, workSpace])
+
+  const deleteClipImageAndRect = useCallback(() => {
+    if (!canvas) return
+    let rect = null // 裁剪rect
+    let clipImage = null // 被裁剪的图片
+    canvas.getObjects().forEach((item) => {
+      if (item.id === 'currentClipRect') {
+        rect = item
+      }
+      if (item.id === clipImageId) {
+        clipImage = item
+      }
+    })
+    if (!rect || !clipImage) return
+    canvas.remove(rect)
+    canvas.remove(clipImage)
+    canvas.discardActiveObject()
+    canvas.renderAll()
+    setIsClipImage(false)
+  }, [canvas, clipImageId])
   /**
    * 删除
    */
   const deleteObjects = useCallback(() => {
-    // 如果正在剪裁图片不让删除
-    if (isClipImage) return
-    const activeObject = canvas.getActiveObjects();
-    if (activeObject) {
-      activeObject.map((item) => canvas.remove(item));
-      canvas.discardActiveObject();
-      canvas.renderAll();
+    // 如果正在剪裁图片
+    if (isClipImage) {
+      return
+      // deleteClipImageAndRect()
     }
-  }, [canvas, isClipImage])
+    const activeObject = canvas.getActiveObjects()
+    if (activeObject) {
+      activeObject.map((item) => canvas.remove(item))
+      canvas.discardActiveObject()
+      canvas.renderAll()
+    }
+  }, [canvas, isClipImage, clipImageId])
 }
 
 export default useEvents

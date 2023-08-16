@@ -21,6 +21,6 @@ export const attrTabList: Array<AttrTabListItem> = [
 ]
 export const attrAreaComponent = {
   'image': ImageSpaceAttr,
-  'textbox': TextSpaceAttr
+  'i-text': TextSpaceAttr
 }
 export const DefaultKey = 'Attr'

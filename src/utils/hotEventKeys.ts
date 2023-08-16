@@ -5,5 +5,6 @@ export const KeyNames = {
   ctrlz: 'ctrl+z,command+z', // 撤销
   ctrlshiftz: 'ctrl+shift+z,command+shift+z', // 重做
   enter: 'enter',
-  esc: 'esc'
+  esc: 'esc',
+  zoom:'command+*,command+*,ctrl+*,ctrl+*'
 };
