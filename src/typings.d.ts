@@ -32,3 +32,6 @@ declare global {
   }
 }
 declare module 'react-sortable-hoc'
+interface Window {
+  sensors: any;
+}

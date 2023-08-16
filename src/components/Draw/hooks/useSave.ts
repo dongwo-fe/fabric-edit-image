@@ -5,6 +5,7 @@ import { uuid } from '../../../utils/utils';
 import { saveHistory as saveHistoryApi } from '../../../api/image';
 import useClipImage from './useClipImage';
 import useToast from './useToast';
+import { trackSensors, SensorKeys } from '../../../utils/sensors';
 
 const useSave = () => {
   const userInfo = localStorage.getItem('userInfo')
@@ -95,6 +96,10 @@ const useSave = () => {
       // 恢复之前的缩放比例
       editor.ruler.showGuideline();
       setSaveToImageLoading(false)
+      trackSensors(SensorKeys.saveEditImageClick, {
+        imgSrc: mainUrl,
+        userPhone: phone
+      })
     } catch (err) {
       console.log('onSaveToImage err', err)
       workSpace?.auto()
