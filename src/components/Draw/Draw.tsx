@@ -41,7 +41,7 @@ const Draw: React.FC<{ src?: string }> = (props) => {
     }
     // 获取接口的历史数据
     try {
-      // const res = await getDetail({imgSrc: props.src})
+      const res = await getDetail({imgSrc: props.src})
       initCanvas(JSON.parse(res.data))
     } catch (err) {
       initCanvas()

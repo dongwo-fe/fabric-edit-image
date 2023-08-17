@@ -76,8 +76,8 @@ const useClipImage = () => {
         newImage.set({
           left: newRect.left,
           top: newRect.top,
-          // rawScaleX: image.scaleX,
-          // rawScaleY: image.scaleY,
+          rawScaleX: image.scaleX,
+          rawScaleY: image.scaleY,
           sourceSrc: image.sourceSrc,
           rectDiffLeft: newRect.left - image.left,
           rectDiffTop: newRect.top - image.top,
@@ -129,8 +129,8 @@ const useClipImage = () => {
     const cloneObject = clipImage.get('cloneObject')
     cloneObject.set({
       sourceSrc: clipImage.sourceSrc,
-      // rawScaleX: clipImage.scaleX,
-      // rawScaleY: clipImage.scaleY,
+      rawScaleX: clipImage.scaleX,
+      rawScaleY: clipImage.scaleY,
       rectDiffLeft: clipImage.rectDiffLeft,
       rectDiffTop: clipImage.rectDiffTop,
     })

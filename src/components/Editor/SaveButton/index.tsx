@@ -13,7 +13,7 @@ const SaveButton = () => {
       {/*  <span>预览</span>*/}
       {/*</span>*/}
       <span className={styles.saveWrap}>
-        <span onClick={onSave} className={styles.saveButton}>
+        <span onClick={saveToImage} className={styles.saveButton}>
           下&nbsp;载
         </span>
         {/*<span className={`${styles.fixButton} ${show ? styles.showButton : ''}`}>*/}

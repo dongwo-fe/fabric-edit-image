@@ -22,7 +22,7 @@ const useAddObject = () => {
    * 新增图片
    * @param item
    */
-  const addImage = useCallback((src, options,callback) => {
+  const addImage = useCallback((src, options, callback) => {
     if (!workSpace) return
     setLoading(true)
     if (isClipImage) cancelClipImage()
@@ -56,11 +56,13 @@ const useAddObject = () => {
     if (!workSpace) return
     if (isClipImage) cancelClipImage()
     const text = new fabric.IText(item.title, {
-      ...DefaultOptions.text,
       fontFamily: 'serif',
       fontSize: item.style.fontSize as number * 3,
       fontWeight: item.style.fontWeight as number,
       id: uuid(),
+      lockScalingX: false,
+      lockScalingY: false,
+      ...DefaultOptions.text,
     })
     text.set({
       left: (workSpace.width - text.width) / 2,

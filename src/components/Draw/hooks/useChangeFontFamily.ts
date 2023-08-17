@@ -19,7 +19,7 @@ let globalFontList = null
  */
 export const filterToText = (list: any) => {
   if (!Array.isArray(list)) return []
-  return list.filter((item: any) => item.type === 'textbox' && !GeneralTextList.includes(item.fontFamily))
+  return list.filter((item: any) => item.type === 'i-text' && !GeneralTextList.includes(item.fontFamily))
 }
 
 

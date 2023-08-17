@@ -235,13 +235,11 @@ function initMainControl() {
         left: target.left + 20,
         top: target.top + 20,
         sourceSrc: target.sourceSrc,
-        // rawScaleX: target.rawScaleX,
-        // rawScaleY: target.rawScaleY,
+        rawScaleX: target.rawScaleX,
+        rawScaleY: target.rawScaleY,
         rectDiffLeft: target.rectDiffLeft,
         rectDiffTop: target.rectDiffTop
       })
-      cloned.left += 20
-      cloned.top += 20
       cloned.setCoords()
       canvas.add(cloned)
       canvas.setActiveObject(cloned)
@@ -266,8 +264,8 @@ function initMainControl() {
     if (image.type !== 'image') return
     const canvas = image.canvas;
     const sourceSrc = image.sourceSrc
-    const rawScaleX = image.scaleX
-    const rawScaleY = image.scaleY
+    const rawScaleX = image.rawScaleX || image.scaleX
+    const rawScaleY = image.rawScaleY || image.scaleY
     const rectDiffLeft = image.rectDiffLeft
     const rectDiffTop = image.rectDiffTop
     const index = canvas.getObjects().findIndex(item => item.id === image.id);
@@ -276,7 +274,6 @@ function initMainControl() {
     image.clone((o) => {
       image.set({cloneObject: o})
     })
-    console.log(rawScaleX, rawScaleY)
     if (sourceSrc) {
       image.setSrc(sourceSrc, () => {
         canvas.renderAll()

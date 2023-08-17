@@ -5,6 +5,8 @@ import { fabric } from 'fabric';
 import { KeyNames } from '../../../utils/hotEventKeys';
 import { hotkeys } from '../../../core/initHotKeys'
 import useClipImage from './useClipImage';
+import { isUndef } from '../../../utils';
+import { imgPect, transformImgRatio } from '../../../utils/tool';
 
 const useEvents = () => {
   const {
@@ -84,13 +86,47 @@ const useEvents = () => {
   const onZoom = useCallback((e) => {
     if (e.code === 'Minus') {
       workSpace?.small(0.05)
+      e.preventDefault();
+      e.stopPropagation();
     }
     if (e.code === 'Equal') {
       workSpace?.big(0.05)
+      e.preventDefault();
+      e.stopPropagation();
     }
-    e.preventDefault();
-    e.stopPropagation();
   }, [canvas, workSpace])
+  useEffect(() => {
+    if (!canvas) return
+    canvas.on('object:modified', (e) => {
+      const target = e.transform?.target
+      if (!target) return
+      if (target.type !== 'image') return
+      if (isUndef(target.rawScaleX) || isUndef(target.rawScaleY)) return
+      let newScaleX = null;
+      let newScaleY = null;
+      const x = e.target.scaleX - 1
+      const y = e.target.scaleY - 1
+      if (x < 0) {
+        newScaleX = target.rawScaleX - x * -1
+      }
+      // if (x > 0) {
+      //   newScaleX = target.rawScaleX + x
+      // }
+      if (y < 0) {
+        newScaleY = target.rawScaleY - y * -1
+      }
+      // if (y > 0) {
+      //   newScaleY = target.rawScaleY + y
+      // }
+      console.log(target.rawScaleX, target.rawScaleY)
+      console.log(newScaleX, newScaleY)
+      target.set({
+        rawScaleX: newScaleX,
+        rawScaleY: newScaleY
+      })
+      canvas.renderAll()
+    })
+  }, [canvas])
   /**
    * 鼠标缩放事件
    */
