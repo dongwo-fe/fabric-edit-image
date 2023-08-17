@@ -62,11 +62,11 @@ const useClipImage = () => {
       const file = base64ConvertFile(base64)
       const res = await postUploadImage(file)
       cropped.src = res.url
+      // cropped.src = base64
       // 裁剪完成收回复画布缩放比例
       workSpace?.setZoomAuto(scale)
       // 等待裁剪的图片加载完成
       cropped.onload = function () {
-
         // 将原图片删除
         canvas.remove(image)
         // 创建新的图片
@@ -81,6 +81,8 @@ const useClipImage = () => {
           sourceSrc: image.sourceSrc,
           rectDiffLeft: newRect.left - image.left,
           rectDiffTop: newRect.top - image.top,
+          prevWidth: newRect.getScaledWidth(),
+          prevHeight: newRect.getScaledHeight()
         })
         canvas.add(newImage);
         if (currentClipImageIndex !== clipRawIndex) {
@@ -127,6 +129,7 @@ const useClipImage = () => {
     if (rect) canvas.remove(rect)
     canvas.remove(clipImage)
     const cloneObject = clipImage.get('cloneObject')
+    if (!clipImage) return
     cloneObject.set({
       sourceSrc: clipImage.sourceSrc,
       rawScaleX: clipImage.scaleX,

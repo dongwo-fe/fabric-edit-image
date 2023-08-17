@@ -6,7 +6,6 @@ import { KeyNames } from '../../../utils/hotEventKeys';
 import { hotkeys } from '../../../core/initHotKeys'
 import useClipImage from './useClipImage';
 import { isUndef } from '../../../utils';
-import { imgPect, transformImgRatio } from '../../../utils/tool';
 
 const useEvents = () => {
   const {
@@ -68,6 +67,13 @@ const useEvents = () => {
       .filter((item) => !(item instanceof fabric.GuideLine)); // 过滤掉辅助线
     if (actives && actives.length === 1) {
       const activeObject = actives[0]
+      if (activeObject && activeObject.type === 'image') {
+        activeObject.set({
+          prevWidth: activeObject.getScaledWidth(),
+          prevHeight: activeObject.getScaledHeight()
+        })
+        canvas.renderAll()
+      }
       setSelectMode('one')
       setSelectIds([activeObject.id])
       setSelectOneType(activeObject.type)
@@ -102,29 +108,16 @@ const useEvents = () => {
       if (!target) return
       if (target.type !== 'image') return
       if (isUndef(target.rawScaleX) || isUndef(target.rawScaleY)) return
-      let newScaleX = null;
-      let newScaleY = null;
-      const x = e.target.scaleX - 1
-      const y = e.target.scaleY - 1
-      if (x < 0) {
-        newScaleX = target.rawScaleX - x * -1
-      }
-      // if (x > 0) {
-      //   newScaleX = target.rawScaleX + x
-      // }
-      if (y < 0) {
-        newScaleY = target.rawScaleY - y * -1
-      }
-      // if (y > 0) {
-      //   newScaleY = target.rawScaleY + y
-      // }
-      console.log(target.rawScaleX, target.rawScaleY)
-      console.log(newScaleX, newScaleY)
+      const prevWidth = target.prevWidth
+      const prevHeight = target.prevHeight
       target.set({
-        rawScaleX: newScaleX,
-        rawScaleY: newScaleY
+        rawScaleX: target.getScaledWidth() / prevWidth * target.rawScaleX,
+        rawScaleY: target.getScaledHeight() / prevHeight * target.rawScaleY,
+        prevWidth: target.getScaledWidth(),
+        prevHeight: target.getScaledHeight()
       })
       canvas.renderAll()
+
     })
   }, [canvas])
   /**

@@ -142,7 +142,7 @@ class Editor extends EventEmitter {
   getJson() {
     return this.canvas.toJSON(
       ['id', 'gradientAngle', 'selectable', 'hasControls', 'sourceSrc', 'rawScaleX',
-        'rawScaleY', 'rectDiffLeft', 'rectDiffTop', 'ml'
+        'rawScaleY', 'rectDiffLeft', 'rectDiffTop', 'prevWidth', 'prevHeight', 'cloneObject'
       ]);
   }
 

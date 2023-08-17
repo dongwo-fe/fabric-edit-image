@@ -232,13 +232,16 @@ function initMainControl() {
     const canvas = target.canvas;
     target.clone(function (cloned) {
       cloned.set({
+        id: uuid(),
         left: target.left + 20,
         top: target.top + 20,
         sourceSrc: target.sourceSrc,
         rawScaleX: target.rawScaleX,
         rawScaleY: target.rawScaleY,
         rectDiffLeft: target.rectDiffLeft,
-        rectDiffTop: target.rectDiffTop
+        rectDiffTop: target.rectDiffTop,
+        prevWidth: target.prevWidth,
+        prevHeight: target.prevHeight
       })
       cloned.setCoords()
       canvas.add(cloned)
@@ -263,34 +266,41 @@ function initMainControl() {
     const image = transform.target;
     if (image.type !== 'image') return
     const canvas = image.canvas;
-    const sourceSrc = image.sourceSrc
-    const rawScaleX = image.rawScaleX || image.scaleX
-    const rawScaleY = image.rawScaleY || image.scaleY
-    const rectDiffLeft = image.rectDiffLeft
-    const rectDiffTop = image.rectDiffTop
+    const rectLeft = image.left // 矩形的位置X
+    const rectTop = image.top // 矩形的位置Y
+    const sourceSrc = image.sourceSrc // 原图的src，做回显的时候需要用
+    const rawScaleX = image.rawScaleX || image.scaleX // 原图的缩放比例X
+    const rawScaleY = image.rawScaleY || image.scaleY // 原图的缩放比例Y
+    const rectDiffLeft = image.rectDiffLeft // 图片距离rect裁剪框的偏差X
+    const rectDiffTop = image.rectDiffTop // 图片距离rect裁剪框的偏差Y
+    // 获取到裁剪之前的层级
     const index = canvas.getObjects().findIndex(item => item.id === image.id);
-    const sourceWidth = image.getScaledWidth()
-    const sourceHeight = image.getScaledHeight()
-    image.clone((o) => {
-      image.set({cloneObject: o})
-    })
+    const sourceWidth = image.getScaledWidth() // 获取图片的宽，这就是裁剪框的宽
+    const sourceHeight = image.getScaledHeight() // 获取图片的高，这就是裁剪框的高
+    image.clone((o) => image.set({cloneObject: o})) // 克隆一个object，取消裁剪的时候会用到
     if (sourceSrc) {
+      // 如果有sourceSrc代表之前裁剪过，这里那原图的src进行返显
       image.setSrc(sourceSrc, () => {
         canvas.renderAll()
       }, {crossOrigin: 'anonymous'})
+      /**
+       * 设置原图的位置和原图的缩放比
+       * 缩放比：这个是在外面操作的时候计算好的，直接赋值就行
+       * 位置：
+       */
       image.set({
         scaleX: rawScaleX,
         scaleY: rawScaleY,
-        left: !isUndef(rectDiffLeft) ? image.left - rectDiffLeft : image.left,
-        top: !isUndef(rectDiffTop) ? image.top - rectDiffTop : image.top,
+        left: !isUndef(rectDiffLeft) ? image.left - (rectDiffLeft * image.scaleX) : image.left,
+        top: !isUndef(rectDiffTop) ? image.top - (rectDiffTop * image.scaleY) : image.top,
       })
     }
     image.bringToFront() // 将这个图片的层级移动到顶层
-    setHighControlVisible(image, false)
+    setHighControlVisible(image, false) // 正在裁剪中的图片，把他的一些功能干掉
     // 创建一个矩形，让他在图片的上面
     const selectionRect = new fabric.Rect({
-      left: !isUndef(rectDiffLeft) ? rectDiffLeft + image.left : image.left,
-      top: !isUndef(rectDiffTop) ? rectDiffTop + image.top : image.top,
+      left: rectLeft,
+      top: rectTop,
       fill: "rgba(0,0,0,0.3)",
       originX: "left",
       originY: "top",
