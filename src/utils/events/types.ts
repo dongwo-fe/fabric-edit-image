@@ -11,5 +11,7 @@ export const Types = {
   /**
    * 剪裁图片
    */
-  CLIP_IMAGE: 'clipImage'
+  CLIP_IMAGE: 'clipImage',
+
+  SHOW_LOADING: 'show_loading'
 }

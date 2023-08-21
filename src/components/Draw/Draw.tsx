@@ -52,6 +52,7 @@ const Draw: React.FC<{ src?: string }> = (props) => {
    * @param canvasData
    */
   const initCanvas = async (canvasData?: any) => {
+    console.log('initCanvas')
     let mainImg = null;
     if (canvasData && canvasData.objects) {
       // 先从缓存中获取主图src

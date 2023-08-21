@@ -1,11 +1,13 @@
 // @ts-nocheck
 import { useCallback, useContext, useEffect } from 'react';
 import { Context } from '../CanvasContext';
+import { Context as EditorContext } from '../../Editor/Context'
 import { fabric } from 'fabric';
 import { KeyNames } from '../../../utils/hotEventKeys';
 import { hotkeys } from '../../../core/initHotKeys'
 import useClipImage from './useClipImage';
 import { isUndef } from '../../../utils';
+import { events, Types } from '../../../utils/events';
 
 const useEvents = () => {
   const {
@@ -13,7 +15,14 @@ const useEvents = () => {
     clipImageId, setIsClipImage, clipRawIndex,
     isClipImage
   } = useContext(Context)
+  const {setLoading} = useContext(EditorContext)
   const {cancelClipImage} = useClipImage()
+  useEffect(() => {
+    events.on(Types.SHOW_LOADING, setLoading)
+    return () => {
+      events.off(Types.SHOW_LOADING, setLoading)
+    }
+  }, [])
   useEffect(() => {
     if (!canvas) return
     canvas.on({
@@ -71,6 +80,15 @@ const useEvents = () => {
         activeObject.set({
           prevWidth: activeObject.getScaledWidth(),
           prevHeight: activeObject.getScaledHeight()
+        })
+        canvas.renderAll()
+      }
+      if (activeObject.type === 'i-text') {
+        activeObject.setControlsVisibility({
+          mt: false,
+          ml: false,
+          mb: false,
+          mr: false,
         })
         canvas.renderAll()
       }

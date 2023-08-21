@@ -1,7 +1,6 @@
 // @ts-nocheck
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { sortableContainer, sortableElement } from 'react-sortable-hoc'
-import { arrayMoveImmutable } from '../../../utils/utils'
+import { sortableContainer, sortableElement, arrayMove } from 'react-sortable-hoc'
 import { fabric } from 'fabric'
 import style from './index.module.scss'
 import { Context } from '../../Draw'
@@ -17,8 +16,7 @@ const SortableItem = sortableElement((props: { item }) => {
   /**
    * 设置高亮
    */
-  const clickItem = useCallback((e) => {
-    e.stopPropagation()
+  const clickItem = useCallback(() => {
     if (!canvas) return
     canvas.setActiveObject(item.object)
     canvas.renderAll()
@@ -47,6 +45,7 @@ const SortableItem = sortableElement((props: { item }) => {
     <div className={style.button}>
       {/* 隐藏 */}
       <img
+        draggable={false}
         onClick={onHiddenObject}
         src={isVisible ?
           'https://ossprod.jrdaimao.com/file/1690437893570728.svg' :
@@ -55,6 +54,7 @@ const SortableItem = sortableElement((props: { item }) => {
       />
       {/* 锁定 */}
       <img
+        draggable={false}
         onClick={onLockObject}
         src={isLock ?
           'https://ossprod.jrdaimao.com/file/1690437902259961.svg' :
@@ -67,7 +67,7 @@ const SortableItem = sortableElement((props: { item }) => {
       {
         item.type === 'image' ?
           <div className={style.image}>
-            <img src={item.src} alt=""/>
+            <img draggable={false} src={item.src} alt=""/>
           </div> :
           <div
             className={style.text}
@@ -79,11 +79,12 @@ const SortableItem = sortableElement((props: { item }) => {
     </div>
     <DragHandle/>
   </div>
-})
+});
 
 const DragHandle = () => {
   return <div className={style.move}>
-    <img src="https://ossprod.jrdaimao.com/file/1690437934587361.svg" alt=""/>
+    <img draggable={false}
+         src="https://ossprod.jrdaimao.com/file/1690437934587361.svg" alt=""/>
   </div>
 }
 
@@ -103,7 +104,6 @@ const OrderList = () => {
   const onSortEnd = useCallback(({oldIndex, newIndex}) => {
     // 位置不变不处理
     if (oldIndex === newIndex) return
-    setList(prevState => arrayMoveImmutable(prevState, oldIndex, newIndex))
     const oldObject = list[oldIndex]?.object;
     if (!oldObject) return
     if (newIndex < oldIndex) {
@@ -115,14 +115,19 @@ const OrderList = () => {
     } else {
       if (newIndex === list.length - 1) return downTop(oldObject)
       // 下移
-      for (let i = oldIndex; i > newIndex; i++) {
+      for (let i = oldIndex; i < newIndex; i++) {
         down(oldObject)
       }
     }
+    setList(prevState => arrayMove(prevState, oldIndex, newIndex))
   }, [list, setList, up, upTop, down, downTop]);
 
   useEffect(() => {
-    canvas?.on('after:render', getList);
+    if (!canvas) return
+    canvas.on('after:render', getList);
+    return () => {
+      canvas.off('after:render', getList);
+    }
   }, [canvas])
 
   /**
@@ -163,11 +168,11 @@ const OrderList = () => {
         </div> : null
       }
       {
-        list.length ? <SortableContainer distance={1} onSortEnd={onSortEnd}>
+        list.length ? <SortableContainer distance={10} lockAxis="y" onSortEnd={onSortEnd}>
           <div className={style.orderList}>
             {
               list.map((item, index) => {
-                return <SortableItem index={index} key={`item-${index}`} item={item}/>
+                return <SortableItem index={index} key={item.id} item={item}/>
               })
             }
           </div>

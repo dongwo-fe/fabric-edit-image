@@ -87,7 +87,7 @@ const ImageResource = () => {
    */
   const onUploadFile = async (e: any) => {
     if (uploading) return
-    const fileList = [...e.target.files]
+    const fileList = e.target.files
     try {
       setUploading(true)
       setLoading(true)
@@ -101,14 +101,15 @@ const ImageResource = () => {
           stockName: file.name
         })
       }
+      await queryList()
     } catch (err) {
       console.log(err)
       toast.error(err.message)
+    } finally {
+      setUploading(false)
+      setLoading(false)
+      // e.target.value = ''
     }
-    e.target.value = ''
-    await queryList()
-    setUploading(false)
-    setLoading(false)
   }
 
   const onDragStart = e => {

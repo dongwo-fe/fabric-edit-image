@@ -40,7 +40,6 @@ export default function useHistoryTravel<T>(initialValue?: T, maxLength: number 
   });
 
   const { present, past, future } = history;
-
   const initialValueRef = useRef(initialValue);
 
   const reset = (...params: any[]) => {

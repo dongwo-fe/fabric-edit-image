@@ -84,7 +84,6 @@ function intervalControl() {
     styleOverride: any,
     fabricObject: fabric.Object
   ) {
-    if (fabricObject.type === 'i-text') return
     drawImg(ctx, left, top, verticalImgIcon, 20, 25, fabricObject.angle);
   }
 
@@ -95,7 +94,6 @@ function intervalControl() {
     styleOverride: any,
     fabricObject: fabric.Object
   ) {
-    if (fabricObject.type === 'i-text') return
     drawImg(ctx, left, top, horizontalImgIcon, 25, 20, fabricObject.angle);
   }
 
@@ -230,6 +228,7 @@ function initMainControl() {
     const target = transform.target;
     if (!target) return
     const canvas = target.canvas;
+    events.emit(Types.SHOW_LOADING, true)
     target.clone(function (cloned) {
       cloned.set({
         id: uuid(),
@@ -247,6 +246,7 @@ function initMainControl() {
       canvas.add(cloned)
       canvas.setActiveObject(cloned)
       canvas.renderAll()
+      events.emit(Types.SHOW_LOADING, false)
     });
   }
 
@@ -273,8 +273,7 @@ function initMainControl() {
     const rawScaleY = image.rawScaleY || image.scaleY // 原图的缩放比例Y
     const rectDiffLeft = image.rectDiffLeft // 图片距离rect裁剪框的偏差X
     const rectDiffTop = image.rectDiffTop // 图片距离rect裁剪框的偏差Y
-    // 获取到裁剪之前的层级
-    const index = canvas.getObjects().findIndex(item => item.id === image.id);
+    const index = canvas.getObjects().findIndex(item => item.id === image.id); // 获取到裁剪之前的层级
     const sourceWidth = image.getScaledWidth() // 获取图片的宽，这就是裁剪框的宽
     const sourceHeight = image.getScaledHeight() // 获取图片的高，这就是裁剪框的高
     image.clone((o) => image.set({cloneObject: o})) // 克隆一个object，取消裁剪的时候会用到
@@ -289,6 +288,7 @@ function initMainControl() {
        * 位置：
        */
       image.set({
+        id: 'clipRawImage',
         scaleX: rawScaleX,
         scaleY: rawScaleY,
         left: !isUndef(rectDiffLeft) ? image.left - (rectDiffLeft * image.scaleX) : image.left,

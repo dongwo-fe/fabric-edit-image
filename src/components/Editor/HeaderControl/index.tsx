@@ -2,40 +2,25 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Context } from '../../Draw'
 import { events, Types } from '../../../utils/events'
-import useHistoryTravel from '../../../hooks/useHistoryTravel'
 import { KeyNames } from '../../../utils/hotEventKeys'
 import { hotkeys } from '../../../core/initHotKeys'
 import styles from './styles.module.scss'
 import { Tooltip } from 'react-tooltip'
 import { floatRound } from '../../../utils/calculate'
 import useClipImage from '../../Draw/hooks/useClipImage'
+import useHistory from '../../Draw/hooks/useHistory';
 
 const HeaderControl = () => {
   const {
     workSpace, drawMode, setDrawMode, canvas, editor, isClipImage,
-    setIsClipImage, setClipImageId, setClipRawIndex,clipImageId, clipRawIndex
+    setIsClipImage, setClipImageId, setClipRawIndex, clipImageId, clipRawIndex
   } = useContext(Context)
   const {saveClipImage, cancelClipImage} = useClipImage()
+  const {undo, redo, backLength, forwardLength} = useHistory()
   const [scale, setScale] = useState(0)
   const drawModeRef = useRef('default')
-  const historyFlagRef = useRef(false)
   drawModeRef.current = drawMode
-  const {value, setValue, go, reset, backLength, forwardLength} = useHistoryTravel<any>(undefined, 50)
 
-  useEffect(() => {
-    canvas?.on({
-      'object:added': save,
-      'object:modified': save,
-    })
-    events.on(Types.CLIP_IMAGE, onClipImage)
-    return () => {
-      canvas?.off({
-        'object:added': save,
-        'object:modified': save,
-      })
-      events.off(Types.CLIP_IMAGE, onClipImage)
-    }
-  }, [canvas, workSpace])
   useEffect(() => {
     hotkeys(KeyNames.enter, saveClipImage)
     hotkeys(KeyNames.esc, cancelClipImage)
@@ -43,24 +28,17 @@ const HeaderControl = () => {
       hotkeys.unbind(KeyNames.enter, saveClipImage)
       hotkeys.unbind(KeyNames.esc, cancelClipImage)
     }
-  }, [canvas, workSpace,clipImageId, clipRawIndex])
+  }, [canvas, workSpace, clipImageId, clipRawIndex])
   useEffect(() => {
     hotkeys(KeyNames.ctrlz, undo)
     hotkeys(KeyNames.ctrlshiftz, redo)
+    events.on(Types.CLIP_IMAGE, onClipImage)
     return () => {
       hotkeys.unbind(KeyNames.ctrlz, undo)
       hotkeys.unbind(KeyNames.ctrlshiftz, redo)
+      events.off(Types.CLIP_IMAGE, onClipImage)
     }
   }, [])
-  useEffect(() => {
-    if (!canvas) return
-    if (!historyFlagRef.current) return
-    canvas?.clear();
-    canvas?.loadFromJSON(value, () => {
-      historyFlagRef.current = false
-      canvas.renderAll();
-    });
-  }, [value, canvas])
   useEffect(() => {
     if (workSpace?.scale) {
       setScale(floatRound(workSpace.scale * 100))
@@ -77,29 +55,31 @@ const HeaderControl = () => {
       window.removeEventListener('keyup', onKeyUp)
     }
   }, [workSpace, drawMode])
-  useEffect(() => {
-    if (!workSpace || !editor) return
-    reset(editor.getJson());
-  }, [editor, workSpace])
 
+  /**
+   * 裁剪的回调，存储一些裁剪信息
+   * @param visible
+   * @param rawIndex
+   * @param clipImageId
+   */
   const onClipImage = ({visible, rawIndex, clipImageId}) => {
     setIsClipImage(visible)
     setClipRawIndex(rawIndex)
     setClipImageId(clipImageId)
   }
-  const save = (event: any) => {
-    // 过滤选择元素事件
-    const isSelect = event.action === undefined && event.e;
-    if (isSelect || !canvas) return
-    if (historyFlagRef.current) return
-    setValue(editor?.getJson())
-  }
-
+  /**
+   * 按下空格开启拖拽模式
+   * @param e
+   */
   const onKeyDown = (e: any) => {
     if (e.code !== 'Space') return
     if (drawModeRef.current === 'move') return
     switchDragMode()
   }
+  /**
+   * 抬起空格取消拖拽模式
+   * @param e
+   */
   const onKeyUp = (e: any) => {
     if (e.code !== 'Space') return
     switchDefaultMode()
@@ -120,22 +100,7 @@ const HeaderControl = () => {
     workSpace?.endDring()
     setDrawMode('default')
   }
-  /**
-   * 后退
-   */
-  const undo = () => {
-    historyFlagRef.current = true
-    go(-1);
-  };
-  /**
-   * 重做
-   */
-  const redo = () => {
-    historyFlagRef.current = true
-    go(1);
-  };
-
-  // 是否正在剪裁图片
+  // 是否正在剪裁图片，如果正在裁剪图片应该展示裁剪图片的按钮
   if (isClipImage) {
     return <div className={styles.headerControl}>
       <span className={styles.clipSaveButton} onClick={saveClipImage}>
