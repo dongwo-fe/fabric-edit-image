@@ -6,6 +6,7 @@ import { Context as EditorContext } from '../../Editor/Context';
 import { base64ConvertFile } from '../../../utils/tool'
 import { postUploadImage } from '../../../api/image';
 import useToast from './useToast';
+import { uuid } from '../../../utils/utils';
 
 const useClipImage = () => {
   const {workSpace, canvas, clipImageId, clipRawIndex, setIsClipImage} = useContext(Context)
@@ -74,6 +75,7 @@ const useClipImage = () => {
         // 这个原图的src很重要，重新编辑的时候会用到
         // 设置新图片的位置和newRect位置保持一致
         newImage.set({
+          id: image.id,
           left: newRect.left,
           top: newRect.top,
           rawScaleX: image.scaleX,
@@ -131,6 +133,7 @@ const useClipImage = () => {
     const cloneObject = clipImage.get('cloneObject')
     if (!clipImage) return
     cloneObject.set({
+      id: uuid(),
       sourceSrc: clipImage.sourceSrc,
       rawScaleX: clipImage.scaleX,
       rawScaleY: clipImage.scaleY,
