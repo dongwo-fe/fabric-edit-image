@@ -13,14 +13,11 @@ const ImageResource = () => {
   const toast = useToast()
   const {canvas} = useContext(Context)
   const EDIT_IMAGE_LIST = sessionStorage.getItem('EDIT_IMAGE_LIST')
-  const userInfo = localStorage.getItem('userInfo')
   const [uploading, setUploading] = useState(false)
-  const phone = userInfo ? JSON.parse(userInfo).phone : '15612868761';
   const {addImage} = useAddObject()
-  const searchRef = useRef('')
 
   const [list, setList] = useState(EDIT_IMAGE_LIST ?
-    JSON.parse(sessionStorage.getItem('EDIT_IMAGE_LIST')) :
+    JSON.parse(EDIT_IMAGE_LIST) :
     [])
   const {run} = useDropDown()
 
@@ -74,8 +71,10 @@ const ImageResource = () => {
    */
   const queryList = async () => {
     try {
-      const res = await getImageList({phone, pageIndex: 1, pageSize: 500})
-      sessionStorage.setItem('EDIT_IMAGE_LIST', JSON.stringify(res))
+      const res = await getImageList({ pageIndex: 1, pageSize: 500})
+      if (res) {
+        sessionStorage.setItem('EDIT_IMAGE_LIST', JSON.stringify(res))
+      }
       setList(res)
     } catch (err) {
       console.log(err)
@@ -96,7 +95,6 @@ const ImageResource = () => {
         if (!/(png|jpg|jpeg)/g.test(file.type)) continue
         const res = await postUploadImage(file)
         await addImageApi({
-          phone,
           imgSrc: res.url,
           stockName: file.name
         })
@@ -126,13 +124,13 @@ const ImageResource = () => {
         <input multiple disabled={uploading} type="file" accept='.png,.jpg,.jpeg' onChange={onUploadFile}/>
       </div>
       {
-        !list.length ? <div className={styles.empty}>
+        !list?.length ? <div className={styles.empty}>
           <img src="https://ossprod.jrdaimao.com/file/169035729200810.png" alt=""/>
           <p>还没有文件哦~</p>
         </div> : null
       }
       {
-        list.length ? <div className={styles.fileList} id='img-file-list'>
+        list?.length ? <div className={styles.fileList} id='img-file-list'>
           {
             list.map((item) => {
               return <div
@@ -141,11 +139,6 @@ const ImageResource = () => {
               >
                 <img
                   onDragStart={onDragStart}
-                  onError={e => {
-                    e.target.style.cursor = 'not-allowed'
-                    e.target.style.pointerEvents = 'none'
-                    e.target.src = 'https://juranapp-prod.oss-cn-beijing.aliyuncs.com/file/1639966318079/picture'
-                  }}
                   onClick={() => addImage(item.imgSrc)}
                   className={styles.image}
                   src={item.imgSrc}

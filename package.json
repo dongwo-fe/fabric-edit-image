@@ -1,10 +1,10 @@
 {
   "name": "@dm/edit-image",
-  "version": "1.0.50",
+  "version": "0.0.1",
   "description": "edit image",
-  "author": "jiyongsheng",
+  "author": "sheng",
   "license": "MIT",
-  "repository": "jiyongsheng/@dm/edit-image",
+  "repository": "image",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
@@ -12,7 +12,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
+    "build": "microbundle-crl -- --no-compress --format modern,cjs",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
@@ -69,8 +69,7 @@
     "dist"
   ],
   "dependencies": {
-    "@dm/http_request": "^2.0.0",
-    "@dm/img_oss": "^1.1.5",
+    "axios": "^1.6.2",
     "events": "^3.3.0",
     "fabric": "5.3.0",
     "file-saver": "^2.0.5",

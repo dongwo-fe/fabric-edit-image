@@ -1,11 +1,24 @@
-import { QF } from '@dm/http_request'
+import axios from 'axios';
 
-function CreateFetch(prePath: string) {
-  return new QF(prePath, 100000)
+const request = axios.create({
+  baseURL: ''
+})
+
+
+request.interceptors.response.use((response) => {
+  if (response.data.code === '200') {
+    return response.data.data;
+  }
+  return response;
+}, error => {
+  console.log(error);
+})
+
+export const fetch = {
+  get: (url: string, params: any) => {
+    return request.get(url, {params});
+  },
+  post: (url: string, data: any) => {
+    return request.post(url, data)
+  }
 }
-
-export const fetch = CreateFetch('')
-export const CreateOpsWebApp = () => CreateFetch('/easyhome-ops-web-application')
-const acFetch = CreateFetch('')
-acFetch.code = 1
-export { acFetch }

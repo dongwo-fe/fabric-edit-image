@@ -10,26 +10,11 @@ import AttrArea from './AttrArea'
 import LoadingOverlay from 'react-loading-overlay'
 import styles from './styles.module.css'
 import { EditImageProps } from '../../index';
-import { isUrl } from '../../utils';
 
 const Editor: React.FC<EditImageProps> = (props) => {
-  const {loading, loadingText, setLoading} = useContext(EditorContext)
+  const {loading, loadingText} = useContext(EditorContext)
   const {show} = useContext(Context)
-  // useEffect(() => {
-  //   if (isUrl(props.src)) {
-  //     setLoading(true)
-  //     const img = new Image()
-  //     img.src = props.src
-  //     img.onload = () => {
-  //       setLoading(false)
-  //     }
-  //     img.onerror = (err) => {
-  //       console.log('load props image error', err)
-  //       setLoading(false)
-  //     }
-  //   }
-  // }, [props.src])
-  // @ts-ignore
+
   return <LoadingOverlay
     active={loading}
     spinner
@@ -42,7 +27,7 @@ const Editor: React.FC<EditImageProps> = (props) => {
         {/* 快捷操作 */}
         { show ?  <HeaderControl/> : null}
         {/* 保存 */}
-        <SaveButton src={props.src}/>
+        <SaveButton />
       </div>
       <div className={styles.content}>
         {/* 左侧资源区域 */}

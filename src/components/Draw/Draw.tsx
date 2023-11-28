@@ -1,5 +1,4 @@
-// @ts-nocheck
-import React, { useEffect, useContext, useRef } from 'react'
+import React, { useEffect, useContext } from 'react'
 import styles from './styles.module.css'
 import { fabric } from 'fabric'
 import Editor from '../../core';
@@ -7,8 +6,6 @@ import { Context } from './CanvasContext'
 import { Context as EditorContext } from '../Editor/Context'
 import useEvents from './hooks/useEvents';
 import EditorWorkspace from '../../core/EditorWorkspace';
-import { getLocal } from '../../utils/local';
-import { LocalKeys } from '../../utils/local/keys';
 import { getDetail } from '../../api/image';
 import { loadImage } from '../../utils/tool';
 import useSave from './hooks/useSave';
@@ -29,7 +26,7 @@ const Draw: React.FC<{ src?: string }> = (props) => {
   }, [fontLoaded])
 
   useEffect(() => {
-    window.addEventListener('beforeunload', (e) => {
+    window.addEventListener('beforeunload', () => {
       unloadSendBeacon()
     })
   }, [])
@@ -41,8 +38,8 @@ const Draw: React.FC<{ src?: string }> = (props) => {
     }
     // 获取接口的历史数据
     try {
-      const res = await getDetail({imgSrc: props.src})
-      initCanvas(JSON.parse(res.data))
+      const res: any = await getDetail({imgSrc: props.src})
+      initCanvas(JSON.parse(res))
     } catch (err) {
       initCanvas()
     }
@@ -52,11 +49,10 @@ const Draw: React.FC<{ src?: string }> = (props) => {
    * @param canvasData
    */
   const initCanvas = async (canvasData?: any) => {
-    console.log('initCanvas')
     let mainImg = null;
     if (canvasData && canvasData.objects) {
       // 先从缓存中获取主图src
-      mainImg = canvasData.objects.find(item => item.id === 'mainImg')?.src
+      mainImg = canvasData.objects.find((item: any) => item.id === 'mainImg')?.src
     } else {
       // 缓存中取不到就去看props里是否有
       mainImg = props.src

@@ -5,12 +5,9 @@ import { uuid } from '../../../utils/utils';
 import { saveHistory as saveHistoryApi } from '../../../api/image';
 import useClipImage from './useClipImage';
 import useToast from './useToast';
-import { trackSensors, SensorKeys } from '../../../utils/sensors';
 
 const useSave = () => {
-  const userInfo = localStorage.getItem('userInfo')
   const toast = useToast()
-  const phone = userInfo ? JSON.parse(userInfo).phone : '15612868761'
   const {editor, canvas, workSpace, mainUrl, isClipImage, clipImageId, clipRawIndex} = useContext(Context)
   const {cancelClipImage} = useClipImage()
   const [saveToImageLoading, setSaveToImageLoading] = useState(false)
@@ -18,38 +15,35 @@ const useSave = () => {
   useLast.current = {
     editor,
     mainUrl,
-    phone
   }
   /**
    * send beacon
    */
   const unloadSendBeacon = useCallback(() => {
-    const {editor, mainUrl, phone} = useLast.current
-    if (!editor || !mainUrl || !phone) return
+    const {editor, mainUrl} = useLast.current
+    if (!editor || !mainUrl) return
     const dataJson = editor.getJson()
     // 把裁剪蒙层过滤出去
     dataJson.objects = dataJson.objects.filter((item: any) => item.id !== 'currentClipRect')
     const data = JSON.stringify({
-      phone,
       data: dataJson ? JSON.stringify(dataJson) : '',
       imgSrc: mainUrl
     })
     const blob = new Blob([data], {type: 'application/json'})
     const isPush = navigator.sendBeacon('/api_editimg/save', blob)
     console.log('navigator.sendBeacon event', isPush)
-  }, [editor, mainUrl, phone])
+  }, [editor, mainUrl])
   /**
    * 保存历史修改记录
    */
   const saveHistory = useCallback(() => {
-    if (!editor || !mainUrl || !phone) return
+    if (!editor || !mainUrl) return
     const dataJson = editor.getJson()
     return saveHistoryApi({
-      phone,
       data: dataJson ? JSON.stringify(dataJson) : '',
       imgSrc: mainUrl
     })
-  }, [editor, mainUrl, phone])
+  }, [editor, mainUrl])
   /**
    * 保存为json
    */
@@ -96,10 +90,6 @@ const useSave = () => {
       // 恢复之前的缩放比例
       editor.ruler.showGuideline();
       setSaveToImageLoading(false)
-      trackSensors(SensorKeys.saveEditImageClick, {
-        imgSrc: mainUrl,
-        userPhone: phone
-      })
     } catch (err) {
       console.log('onSaveToImage err', err)
       workSpace?.auto()

@@ -5,7 +5,6 @@ import { events, Types } from '../../../utils/events'
 import { KeyNames } from '../../../utils/hotEventKeys'
 import { hotkeys } from '../../../core/initHotKeys'
 import styles from './styles.module.scss'
-import { Tooltip } from 'react-tooltip'
 import { floatRound } from '../../../utils/calculate'
 import useClipImage from '../../Draw/hooks/useClipImage'
 import useHistory from '../../Draw/hooks/useHistory';
@@ -118,11 +117,9 @@ const HeaderControl = () => {
 
   return (
     <div className={styles.headerControl}>
-      <Tooltip style={{zIndex: 1060}} className={styles.reactTooltip} anchorSelect='#control-tooltip'/>
       <div>
         {/* 撤销 */}
         <div
-          id='control-tooltip'
           data-tooltip-content="撤销 Ctrl Z"
           data-tooltip-place="bottom"
           onClick={undo}
