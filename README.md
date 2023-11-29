@@ -9,7 +9,7 @@
 1. 克隆仓库：
 
 ```bash
-git clone https://github.com/kukudeshengge/fabirc-edit-image.git
+git clone https://github.com/kukudeshengge/fabric-edit-image.git
 ```
 
 2. 安装依赖和启动项目：
