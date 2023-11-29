@@ -5,12 +5,18 @@ const {
   pushImageItem,
   deleteImageItem,
   writeImageListFile,
+  findImageItem,
   getImageDetail,
   setImageDetail
 } = require('../controll/editImageControll')
 const { v4: uuid } = require('uuid')
-const { Port } = require('../config/index')
+const { joinStaticSrc } = require('../utils')
+const fs = require('fs')
+const path = require('path')
 const router = express.Router()
+const Paths = require('../utils/paths');
+const { MaxCount } = require('../config')
+
 
 // 已上传的图片列表
 router.get('/liststock', async (req, res) => {
@@ -29,11 +35,15 @@ router.post('/addstock', (req, res) => {
     if (!stockName) {
       return res.json(returnError({ message: '参数有误，请检查' }))
     }
+    const list = readImageListFile()
+    if (list.length >= 2) {
+      return res.json(returnError({ message: `最多上传${MaxCount}个素材` }))
+    }
     const data = uuid()
     pushImageItem({
       '_id': data,
       'stockName': '素材',
-      'imgSrc': `http://localhost:${Port}/static/images/${stockName}`
+      'imgSrc': joinStaticSrc(req, stockName)
     })
     res.json(returnFail({ data }))
   } catch (err) {
@@ -61,6 +71,10 @@ router.get('/delstock', (req, res) => {
     if (!id) {
       return res.json(returnError({ message: 'id不存在' }))
     }
+    const item = findImageItem(id)
+    if (!item) return res.json(returnError({ message: '不存在' }))
+    const imgPath = `${Paths.ImageFilePath}/${path.basename(item.imgSrc)}`
+    fs.unlinkSync(imgPath);
     const list = deleteImageItem(id)
     writeImageListFile(list)
     res.json(returnFail())

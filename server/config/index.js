@@ -1,5 +1,6 @@
-const Port = process.env.PORT || '5678';
-
+const Port = process.env.PORT || '8585';
+const MaxCount = 2;
 module.exports = {
-  Port
+  Port,
+  MaxCount
 }

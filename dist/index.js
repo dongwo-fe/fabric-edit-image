@@ -3399,10 +3399,11 @@ var request = axios.create({
 request.interceptors.response.use(function (response) {
   if (response.data.code === '200') {
     return response.data.data;
+  } else {
+    throw new Error(response.data.message);
   }
-  return response;
 }, function (error) {
-  console.log(error);
+  throw new Error(error);
 });
 var fetch = {
   get: function get(url, params) {
@@ -4880,10 +4881,7 @@ var ImageResource = function ImageResource() {
   var queryList = function queryList() {
     try {
       var _temp = _catch(function () {
-        return Promise.resolve(getImageList({
-          pageIndex: 1,
-          pageSize: 500
-        })).then(function (res) {
+        return Promise.resolve(getImageList()).then(function (res) {
           if (res) {
             sessionStorage.setItem('EDIT_IMAGE_LIST', JSON.stringify(res));
           }

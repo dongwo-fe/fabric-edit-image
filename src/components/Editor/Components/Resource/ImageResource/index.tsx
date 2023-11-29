@@ -71,7 +71,7 @@ const ImageResource = () => {
    */
   const queryList = async () => {
     try {
-      const res = await getImageList({ pageIndex: 1, pageSize: 500})
+      const res = await getImageList()
       if (res) {
         sessionStorage.setItem('EDIT_IMAGE_LIST', JSON.stringify(res))
       }

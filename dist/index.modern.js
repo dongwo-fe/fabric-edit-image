@@ -3061,10 +3061,11 @@ const request = axios.create({
 request.interceptors.response.use(response => {
   if (response.data.code === '200') {
     return response.data.data;
+  } else {
+    throw new Error(response.data.message);
   }
-  return response;
 }, error => {
-  console.log(error);
+  throw new Error(error);
 });
 const fetch = {
   get: (url, params) => {
@@ -4512,10 +4513,7 @@ const ImageResource = () => {
   };
   const queryList = async () => {
     try {
-      const res = await getImageList({
-        pageIndex: 1,
-        pageSize: 500
-      });
+      const res = await getImageList();
       if (res) {
         sessionStorage.setItem('EDIT_IMAGE_LIST', JSON.stringify(res));
       }

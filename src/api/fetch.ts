@@ -8,10 +8,11 @@ const request = axios.create({
 request.interceptors.response.use((response) => {
   if (response.data.code === '200') {
     return response.data.data;
+  } else {
+    throw new Error(response.data.message);
   }
-  return response;
 }, error => {
-  console.log(error);
+  throw new Error(error);
 })
 
 export const fetch = {
