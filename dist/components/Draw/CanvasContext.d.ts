@@ -1,0 +1,35 @@
+import React, { FC } from 'react';
+import { fabric } from 'fabric';
+import Editor from '../../core';
+import EditorWorkspace from '../../core/EditorWorkspace';
+interface CanvasContext {
+    canvas: fabric.Canvas | null;
+    editor: Editor | null;
+    workSpace: EditorWorkspace | null;
+    drawMode: string;
+    setDrawMode: (value: string) => void;
+    setCanvas: (canvas: fabric.Canvas) => void;
+    setEditor: (value: Editor) => void;
+    setWorkSpace: (value: EditorWorkspace) => void;
+    selectMode: string;
+    setSelectMode: (value: string) => void;
+    selectIds: Array<string>;
+    setSelectIds: (value: Array<string>) => void;
+    selectOneType: string;
+    setSelectOneType: (value: string) => void;
+    selectActive: Array<string>;
+    setSelectActive: (value: Array<string>) => void;
+    show: boolean;
+    setShow: (value: boolean) => void;
+    mainUrl: string | undefined;
+    setMainUrl: (value: string | undefined) => void;
+    isClipImage: boolean;
+    setIsClipImage: (value: boolean) => void;
+    clipRawIndex: any;
+    setClipRawIndex: (value: any) => void;
+    clipImageId: any;
+    setClipImageId: (value: any) => void;
+}
+export declare const Context: React.Context<CanvasContext>;
+export declare const CanvasProvider: FC;
+export {};
