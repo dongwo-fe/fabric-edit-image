@@ -5,9 +5,11 @@
 node_modules
 
 # builds
+
 .rpt2_cache
 
 # misc
+.idea
 .DS_Store
 .env
 .env.local
