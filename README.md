@@ -52,19 +52,19 @@ npm start
 5.	对齐方式：您可以选择文字的对齐方式，包括左对齐、右对齐、居中对齐等。根据设计需求，选择合适的对齐方式可以使文字在图像中更好地呈现。
 
 ## 预览
-[在线预览](http://8.141.12.38:5858/)
+> [在线预览](http://8.141.12.38:5858/)
 
 * 上传图片 修改属性
-![img.png](http://8.141.12.38:8585/static/demo/1.png)
+![img.png](./demo/1.png)
 
 * 裁剪图片
-![img.png](http://8.141.12.38:8585/static/demo/2.png)
+![img.png](./demo/2.png)
 
 * 添加文字 修改属性
-![img.png](http://8.141.12.38:8585/static/demo/3.png)
+![img.png](./demo/3.png)
 
 * 修改图层顺序
-![img.png](http://8.141.12.38:8585/static/demo/4.png)
+![img.png](./demo/4.png)
 
 * 保存图片
-![img.png](http://8.141.12.38:8585/static/demo/5.png)
+![img.png](./demo/5.png)
