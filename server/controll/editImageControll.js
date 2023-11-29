@@ -40,6 +40,15 @@ const setImageDetail = (key, value) => {
   fs.writeFileSync(Paths.ImageDetailPath, JSON.stringify(data))
 }
 
+const deleteImageDetail = (key, value) => {
+  const json = fs.readFileSync(Paths.ImageDetailPath, 'utf-8')
+  const data = json ? JSON.parse(json) : {}
+  if (data[key]) {
+    delete data[key]
+  }
+  fs.writeFileSync(Paths.ImageDetailPath, JSON.stringify(data))
+}
+
 module.exports = {
   readImageListFile,
   pushImageItem,
@@ -47,5 +56,6 @@ module.exports = {
   writeImageListFile,
   getImageDetail,
   setImageDetail,
-  findImageItem
+  findImageItem,
+  deleteImageDetail
 }

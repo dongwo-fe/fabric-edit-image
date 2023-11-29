@@ -7,7 +7,8 @@ const {
   writeImageListFile,
   findImageItem,
   getImageDetail,
-  setImageDetail
+  setImageDetail,
+  deleteImageDetail
 } = require('../controll/editImageControll')
 const { v4: uuid } = require('uuid')
 const { joinStaticSrc } = require('../utils')
@@ -75,6 +76,7 @@ router.get('/delstock', (req, res) => {
     if (!item) return res.json(returnError({ message: '不存在' }))
     const imgPath = `${Paths.ImageFilePath}/${path.basename(item.imgSrc)}`
     fs.unlinkSync(imgPath);
+    deleteImageDetail(item.image);
     const list = deleteImageItem(id)
     writeImageListFile(list)
     res.json(returnFail())
