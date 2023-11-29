@@ -59,7 +59,7 @@ router.post('/save', (req, res) => {
       return res.json(returnError({ message: '参数有误' }))
     }
     setImageDetail(imgSrc, data)
-    return res.json(returnError())
+    return res.json(returnFail())
   } catch (err) {
     res.json(returnError({ message: err.message }))
   }
